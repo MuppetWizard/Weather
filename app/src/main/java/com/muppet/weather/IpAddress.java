@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 
 public class IpAddress {
 
-    public static final String Server_IP = "http://192.168.0.51:8019";//肖卓然
+    public static final String Server_IP = "http://192.168.0.51:8019";
 
     public static boolean isDebug = false ; //是否为调试模式
 
