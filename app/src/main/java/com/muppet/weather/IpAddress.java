@@ -7,7 +7,6 @@ public class IpAddress {
     public static final String Server_IP = "http://192.168.0.51:8019";
 
     public static boolean isDebug = false ; //是否为调试模式
-
     public static String getUrl(@NonNull String url) {
 
         StringBuilder stringBuilder = new StringBuilder(Server_IP);
