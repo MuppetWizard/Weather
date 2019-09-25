@@ -19,7 +19,7 @@ import butterknife.ButterKnife;
 public class CategoryListAdapter extends BaseAdapter {
 
     private Context mContext;
-    private List<CategoryList.ResBean.CategoryBean> mlist = new ArrayList();
+    private List<CategoryList.ResBean.CategoryBean> mlist = new ArrayList<>();
 
     public CategoryListAdapter(Context mContext) {
         this.mContext = mContext;
