@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_dialog"
+    android:layout_gravity="center">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="10dp"
+        android:text="选择类别"
+        android:textSize="20sp"
+        android:textColor="@color/app_Dark"/>
+    <GridView
+        android:id="@+id/gv_category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:stretchMode="columnWidth"
+        android:numColumns="3"
+        android:columnWidth="40dp"
+        android:verticalSpacing="5dp"
+        android:horizontalSpacing="5dp">
+
+    </GridView>
+</LinearLayout>

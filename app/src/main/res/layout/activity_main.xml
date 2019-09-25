@@ -14,18 +14,36 @@
             android:id="@+id/iv_bg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/app_blue"/>
+            android:scaleType="fitXY"
+            android:src="@mipmap/bgimg"/>
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/app_translation">
-           <TextView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:text="今天天气"
-               android:textSize="30sp"
-               android:layout_gravity="center"
-               android:textColor="@color/app_White"/>
+            android:background="@color/app_transparent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="今天天气"
+                    android:textSize="30sp"
+                    android:layout_gravity="center"
+                    android:textColor="@color/app_White"/>
+                <Button
+                    android:id="@+id/btn_changeImg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="更换壁纸"/>
+                <Button
+                    android:id="@+id/btn_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="选择类别"/>
+            </LinearLayout>
+
         </FrameLayout>
     </FrameLayout>
 
