@@ -44,7 +44,7 @@
                 android:layout_width="45dp"
                 android:layout_height="match_parent"
                 android:paddingLeft="15dp"
-                android:src="@drawable/user"></ImageView>
+                android:src="@mipmap/user"></ImageView>
 
             <EditText
                 android:background="@null"
@@ -65,7 +65,7 @@
                 android:layout_width="45dp"
                 android:layout_height="match_parent"
                 android:paddingLeft="15dp"
-                android:src="@drawable/paswd">
+                android:src="@mipmap/paswd">
             </ImageView>
             <EditText
                 android:background="@null"
@@ -157,7 +157,7 @@
                 android:id="@+id/wechat_login"
                 android:layout_width="134dp"
                 android:layout_height="130dp"
-                android:src="@drawable/wechat"></ImageView>
+                android:src="@mipmap/wechat"></ImageView>
 
             <TextView
                 android:layout_width="match_parent"
@@ -178,7 +178,7 @@
                 android:id="@+id/qq_login"
                 android:layout_width="115dp"
                 android:layout_height="130dp"
-                android:src="@drawable/qq"></ImageView>
+                android:src="@mipmap/qq"></ImageView>
 
             <TextView
                 android:layout_width="match_parent"

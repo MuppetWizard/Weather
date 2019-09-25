@@ -19,9 +19,7 @@ import android.widget.TextView;
 
 import com.muppet.weather.R;
 import com.muppet.weather.Utils.ToastUtil;
-
 import java.util.HashMap;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -109,9 +107,11 @@ public class ActLogin extends AppCompatActivity {
                 msgLogin(this);
                 break;
             case R.id.forget_button_login:
-                forgetLogin();
+                forgetLogin(this);
                 break;
             case R.id.register_button_login:
+                Intent intent = new Intent(ActLogin.this,ActRegister.class);
+                startActivity(intent);
                 break;
             case R.id.login:
                 break;
@@ -122,9 +122,25 @@ public class ActLogin extends AppCompatActivity {
         }
     }
 
-    private void forgetLogin() {
-
+    private void forgetLogin(Context context) {
+        RegisterPage page = new RegisterPage();
+        page.setTempCode(null); //没有申请短信模板编号
+        page.setRegisterCallback(new EventHandler(){
+            public void afterEvent(int event, int result, Object data){
+                if (result == SMSSDK.RESULT_COMPLETE){
+                    //处理成功结果
+//                    HashMap<String,Object> phoneMap = (HashMap<String, Object>) data;
+                    Intent intent = new Intent(ActLogin.this,Forgetpswd.class);
+                    startActivity(intent);
+                }
+                else {
+                    ToastUtil.showMessage("请使用正确手机号");
+                }
+            }
+        });
+        page.show(context);
     }
+
 
     private void msgLogin(Context context) {
         RegisterPage page = new RegisterPage();

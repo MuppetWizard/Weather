@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.muppet.weather.IpAddress;
 import com.muppet.weather.R;
 import com.muppet.weather.Utils.ToastUtil;
 
@@ -58,7 +59,6 @@ public class ActRegister extends AppCompatActivity {
     @BindView(R.id.userread_register)
     TextView userreadRegister;
     private boolean flag = false;
-    private static final String API = "http://xiaogou.free.idcfengye.com/uregister";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,7 +126,7 @@ public class ActRegister extends AppCompatActivity {
         if (flag){
             if (phoneRegister.getText().length()==11) {
                 if (pswdRegister.getText().length() > 6) {
-                    RequestParams requestParams = new RequestParams(API);
+                    RequestParams requestParams = new RequestParams(IpAddress.getUrl(IpAddress.REGISTER));
                     requestParams.addParameter("user_name", phoneRegister.getText().toString());
                     requestParams.addParameter("password", pswdRegister.getText().toString());
                     requestParams.addParameter("password2", pswdRegister.getText().toString());

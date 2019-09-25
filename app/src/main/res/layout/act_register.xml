@@ -15,7 +15,7 @@
        <ImageView
            android:layout_width="65dp"
            android:layout_height="40dp"
-           android:src="@drawable/mobile"
+           android:src="@mipmap/mobile"
            android:paddingLeft="25dp"></ImageView>
        <EditText
            android:id="@+id/phone_register"
@@ -38,7 +38,7 @@
         <ImageView
             android:layout_width="65dp"
             android:layout_height="40dp"
-            android:src="@drawable/paswd"
+            android:src="@mipmap/paswd"
             android:paddingLeft="25dp"></ImageView>
 
         <EditText
@@ -70,7 +70,7 @@
         <ImageView
             android:layout_width="65dp"
             android:layout_height="40dp"
-            android:src="@drawable/code"
+            android:src="@mipmap/code"
             android:paddingLeft="25dp">
         </ImageView>
 <!--        <EditText-->

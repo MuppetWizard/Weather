@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 
 public class IpAddress {
 
-    private static final String Server_IP = "";
+    private static final String Server_IP = "http://xiaogou.free.idcfengye.com";
     private static final String Img_Server_IP = "http://service.picasso.adesk.com";//壁纸
 
     public static boolean isDebug = false ; //是否为调试模式
@@ -28,9 +28,8 @@ public class IpAddress {
         return stringBuilder.toString();
     }
 
-    //登录
-    public static final String LOGIN = "/apiuser/login";
-
+    //注册
+    public static final String REGISTER = "/uregister";
     //默认显示壁纸
     public static final String IMG_NORMAL = "/v1/vertical/vertical";
     //获取手机壁纸类别
