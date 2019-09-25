@@ -15,6 +15,7 @@ import com.muppet.weather.Model.NormalImg;
 import com.muppet.weather.R;
 import com.muppet.weather.Utils.Constant;
 import com.muppet.weather.Utils.ToastUtil;
+import com.muppet.weather.View.CategoryDialog;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private String TAG = "123";
     //第几张图片
     private int changeImg = Constant.NORMAL_ZERO;
+    private CategoryDialog categoryDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +115,10 @@ public class MainActivity extends AppCompatActivity {
                 getBgImg();
                 break;
             case R.id.btn_category:
-
+                if (categoryDialog == null) {
+                    categoryDialog = new CategoryDialog(this);
+                }
+                categoryDialog.show();
                 break;
         }
     }
