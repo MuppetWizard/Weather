@@ -10,6 +10,10 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -46,4 +50,11 @@ dependencies {
     implementation 'org.xutils:xutils:3.5.1'
     implementation 'com.alibaba:fastjson:1.1.52.android'
     implementation 'com.github.lecho:hellocharts-android:v1.5.8'
+}
+apply plugin: 'com.mob.sdk'
+
+MobSDK {
+    appKey "2c8f0438ea66b"
+    appSecret "4f461e04be19c66e79e4b1cfd2ccfe58"
+    SMSSDK {}
 }

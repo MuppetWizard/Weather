@@ -3,6 +3,7 @@ package com.muppet.weather.Utils;
 import com.alibaba.fastjson.JSON;
 
 import org.xutils.common.util.ParameterizedTypeUtil;
+import org.xutils.http.annotation.HttpResponse;
 import org.xutils.http.app.ResponseParser;
 import org.xutils.http.request.UriRequest;
 
@@ -12,7 +13,7 @@ import java.util.List;
 /**
  * Created by XYH on 2018/7/19.
  */
-
+@HttpResponse(parser = JsonRespondParseRemind.class)
 public class JsonRespondParseRemind implements ResponseParser {
     @Override
     public void checkResponse(UriRequest request) throws Throwable {
