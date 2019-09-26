@@ -104,8 +104,8 @@ public class MainActivity extends AppCompatActivity {
      * 保存图片
      */
     private void saveImg() {
-
-        //1321
+        int a = 1;
+        int b = 2;
     }
 
     @OnClick({R.id.btn_changeImg, R.id.btn_category})
