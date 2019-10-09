@@ -5,13 +5,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RadioButton;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.muppet.weather.IpAddress;
 import com.muppet.weather.Model.NormalImg;
+import com.muppet.weather.Model.Weather;
 import com.muppet.weather.R;
 import com.muppet.weather.Utils.Constant;
 import com.muppet.weather.Utils.ToastUtil;
@@ -21,11 +22,14 @@ import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import lecho.lib.hellocharts.view.LineChartView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,11 +39,57 @@ public class MainActivity extends AppCompatActivity {
     Button btnChangeImg;
     @BindView(R.id.btn_category)
     Button btnCategory;
+    @BindView(R.id.city)
+    TextView city;
+    @BindView(R.id.manage)
+    ImageView manage;
+    @BindView(R.id.temperature)
+    TextView temperature;
+    @BindView(R.id.date_info)
+    TextView dateInfo;
+    @BindView(R.id.weather_status)
+    ImageView weatherStatus;
+    @BindView(R.id.wind_power)
+    TextView windPower;
+    @BindView(R.id.wind_direct)
+    TextView windDirect;
+    @BindView(R.id.wind_aqi)
+    TextView windAqi;
+    @BindView(R.id.wind_humidity)
+    TextView windHumidity;
+    @BindView(R.id.ziwaixian)
+    TextView ziwaixian;
+    @BindView(R.id.future_img01)
+    ImageView futureImg01;
+    @BindView(R.id.future_data)
+    TextView futureData;
+    @BindView(R.id.future_img02)
+    ImageView futureImg02;
+    @BindView(R.id.future_date01)
+    TextView futureDate01;
+    @BindView(R.id.future_img03)
+    ImageView futureImg03;
+    @BindView(R.id.future_date02)
+    TextView futureDate02;
+    @BindView(R.id.future_img04)
+    ImageView futureImg04;
+    @BindView(R.id.future_date03)
+    TextView futureDate03;
+    @BindView(R.id.future_img05)
+    ImageView futureImg05;
+    @BindView(R.id.future_date04)
+    TextView futureDate04;
+    @BindView(R.id.future_chart)
+    LineChartView futureChart;
 
     private String TAG = "123";
     //第几张图片
     private int changeImg = Constant.NORMAL_ZERO;
     private CategoryDialog categoryDialog;
+    private Date date;
+    private String mCity = "成都";
+    private List<Weather.ResultBean.FutureBean> mFutureData;
+    private Weather.ResultBean.RealtimeBean mWeather;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +102,82 @@ public class MainActivity extends AppCompatActivity {
 
     private void initView() {
         getBgImg();
+        getWeather();
+    }
+
+    /**
+     * 获取天气信息
+     */
+    private void getWeather() {
+
+        RequestParams params = new RequestParams(IpAddress.getWeatherUrl(IpAddress.WEATHER));
+        params.addParameter("key", Constant.WEATHER_KEY);
+        params.addParameter("city", mCity);
+        x.http().post(params, new Callback.CommonCallback<Weather>() {
+            @Override
+            public void onSuccess(Weather result) {
+                if (result != null) {
+                    Weather.ResultBean weatherData = result.getResult();
+                    if (weatherData != null) {
+                        mWeather = weatherData.getRealtime();
+                        mFutureData = weatherData.getFuture();
+                        //设置天气数据
+                        setWeatherData(mWeather, weatherData, mFutureData);
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    /**
+     * 设置天气数据
+     *
+     * @param mWeather
+     * @param weatherData
+     * @param mFutureData
+     */
+    private void setWeatherData(Weather.ResultBean.RealtimeBean mWeather, Weather.ResultBean weatherData, List<Weather.ResultBean.FutureBean> mFutureData) {
+        String Temperature = mWeather.getTemperature();
+        String Humidity = mWeather.getHumidity();
+        String Info = mWeather.getInfo();
+        String Wid = mWeather.getWid();
+        String Direct = mWeather.getDirect();
+        String Power = mWeather.getPower();
+        String Aqi = mWeather.getAqi();
+        String City = weatherData.getCity();
+        //城市
+        city.setText(City);
+        //温度
+        temperature.setText(Temperature);
+        //湿度
+        windHumidity.setText(Humidity + "%");
+        //获取系统时间
+        date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
+        String taday = sdf.format(date);
+        //日期+天气情况
+        dateInfo.setText(taday + "/" + Info);
+        //风力
+        windPower.setText(Power);
+        //风向
+        windDirect.setText(Direct);
+        //空气质量
+        windAqi.setText(Aqi);
     }
 
     /**

@@ -14,5 +14,7 @@
         android:paddingBottom="5dp"
         android:gravity="center"
         android:textSize="16sp"
-        android:textColor="@color/app_Dark" />
+        android:textColor="@color/app_Dark"
+        android:background="@drawable/bg_item"
+        android:text="nihao"/>
 </LinearLayout>
