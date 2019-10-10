@@ -1,5 +1,6 @@
 package com.muppet.weather.Activity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.muppet.weather.Model.Weather;
 import com.muppet.weather.R;
 import com.muppet.weather.Utils.Constant;
 import com.muppet.weather.Utils.ToastUtil;
+import com.muppet.weather.Utils.Utils;
 import com.muppet.weather.View.CategoryDialog;
 
 import org.xutils.common.Callback;
@@ -23,12 +25,22 @@ import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import lecho.lib.hellocharts.gesture.ContainerScrollType;
+import lecho.lib.hellocharts.gesture.ZoomType;
+import lecho.lib.hellocharts.model.Line;
+import lecho.lib.hellocharts.model.LineChartData;
+import lecho.lib.hellocharts.model.PointValue;
+import lecho.lib.hellocharts.model.ValueShape;
+import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.view.LineChartView;
 
 public class MainActivity extends AppCompatActivity {
@@ -91,12 +103,16 @@ public class MainActivity extends AppCompatActivity {
     private List<Weather.ResultBean.FutureBean> mFutureData;
     private Weather.ResultBean.RealtimeBean mWeather;
 
+    private List<Integer> FutureTemp;
+    private List<PointValue> mPointValues = new ArrayList<PointValue>();
+    private List<String> futureC;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        //1234
+        //初始化
         initView();
     }
 
@@ -109,7 +125,8 @@ public class MainActivity extends AppCompatActivity {
      * 获取天气信息
      */
     private void getWeather() {
-
+        mFutureData = new ArrayList<>();
+        futureC = new ArrayList<>();
         RequestParams params = new RequestParams(IpAddress.getWeatherUrl(IpAddress.WEATHER));
         params.addParameter("key", Constant.WEATHER_KEY);
         params.addParameter("city", mCity);
@@ -123,6 +140,10 @@ public class MainActivity extends AppCompatActivity {
                         mFutureData = weatherData.getFuture();
                         //设置天气数据
                         setWeatherData(mWeather, weatherData, mFutureData);
+                        for (int i = 0; i < weatherData.getFuture().size(); i++) {
+                            futureC.add(weatherData.getFuture().get(i).getTemperature());
+                        }
+                        setChart(futureC);
                     }
                 }
             }
@@ -178,7 +199,170 @@ public class MainActivity extends AppCompatActivity {
         windDirect.setText(Direct);
         //空气质量
         windAqi.setText(Aqi);
+        //天气状况图片
+        switch (Wid) {
+            case "00":
+                weatherStatus.setImageResource(R.mipmap.sunshine);
+                break;
+            case "01":
+                weatherStatus.setImageResource(R.mipmap.cloudy);
+                break;
+            case "02":
+                weatherStatus.setImageResource(R.mipmap.cloudy02);
+                break;
+            case "03":
+            case "04":
+            case "05":
+            case "06":
+            case "07":
+            case "08":
+            case "09":
+            case "10":
+            case "11":
+            case "12":
+            case "13":
+            case "14":
+            case "15":
+            case "16":
+            case "17":
+            case "18":
+            case "19":
+                weatherStatus.setImageResource(R.mipmap.rain);
+                break;
+        }
+        for (int i = 0; i < mFutureData.size(); i++) {
+            String day =  mFutureData.get(i).getWid().getDay();
+            //未来天气数据设置
+            setFutureData(day, i);
+        }
     }
+
+    /**
+     * 设置未来天气
+     * @param day
+     * @param i
+     */
+    private void setFutureData(String day, int i) {
+        ImageView imageView = null;
+        switch (i) {
+            case 0:
+                imageView = futureImg01;
+                break;
+            case 1:
+                imageView = futureImg02;
+                break;
+            case 2:
+                imageView = futureImg03;
+                break;
+            case 3:
+                imageView = futureImg04;
+                break;
+            case 4:
+                imageView = futureImg05;
+                break;
+        }
+        if (imageView != null) {
+            setFutureImg(imageView,day);
+        }else {
+            ToastUtil.showMessage("出现错误");
+        }
+        //未来时间
+        Calendar calendar = Calendar.getInstance();
+        int month = calendar.get(Calendar.MONTH) + 1;//月
+        int time = calendar.get(Calendar.DAY_OF_MONTH);//日
+        futureDate02.setText(month + "/" + (time + 2));
+        futureDate03.setText(month + "/" + (time + 3));
+        futureDate04.setText(month + "/" + (time + 4));
+    }
+
+    /**
+     * 设置未来天气图片
+     * @param imageView
+     * @param day
+     */
+    private void setFutureImg(ImageView imageView, String day) {
+        switch (day) {
+            case "00":
+                imageView.setImageResource(R.mipmap.sunshine);
+                break;
+            case "01":
+                imageView.setImageResource(R.mipmap.cloudy);
+                break;
+            case "02":
+                imageView.setImageResource(R.mipmap.cloudy02);
+                break;
+            case "03":
+            case "04":
+            case "05":
+            case "06":
+            case "07":
+            case "08":
+            case "09":
+                imageView.setImageResource(R.mipmap.rain);
+                break;
+        }
+    }
+
+    /**
+     * 设置图表数据
+     *
+     * @param futureC
+     */
+    public void setChart(List<String> futureC) {
+        FutureTemp = new ArrayList<>();
+        for (int i = 0; i < futureC.size(); i++) {
+            String oC = futureC.get(i);
+            //截取字符串
+            String strStart = "/";
+            String strEnd = "℃";
+            FutureTemp.add(Integer.parseInt(Objects.requireNonNull(Utils.subString(oC, strStart, strEnd))));
+        }
+        getAxisPoints();//获取坐标点
+        initLineChart();//初始化
+    }
+
+    /**
+     * 图表点显示
+     */
+    private void getAxisPoints() {
+        mPointValues = new ArrayList<PointValue>();
+        for (int i = 0; i < FutureTemp.size(); i++) {
+            mPointValues.add(new PointValue(i, FutureTemp.get(i)));
+        }
+    }
+
+    /**
+     * 初始化图表
+     */
+    private void initLineChart() {
+        Line line = new Line(mPointValues).setColor(Color.parseColor("#FFFFFF"));//折线颜色
+        List<Line> lines = new ArrayList<>();
+        //折线图上每个数据点的形状  这里是圆形 （有三种 ：ValueShape.SQUARE  ValueShape.CIRCLE  ValueShape.DIAMOND）
+        line.setShape(ValueShape.CIRCLE);
+        line.setCubic(false);//曲线是否平滑，即是曲线还是折线
+        line.setFilled(false);//是否填充曲线的面积
+        line.setHasLabels(true);//曲线的数据坐标是否加上备注
+//      line.setHasLabelsOnlyForSelected(true);//点击数据坐标提示数据（设置了这个line.setHasLabels(true);就无效）
+        line.setHasLines(true);//是否用线显示。如果为false 则没有曲线只有点显示
+        line.setHasPoints(true);//是否显示圆点 如果为false 则没有原点只有点显示（每个数据点都是个大的圆点）
+        lines.add(line);
+        LineChartData data = new LineChartData();
+        data.setValueLabelsTextColor(Color.parseColor("#FFFFFF"));
+        data.setValueLabelBackgroundEnabled(false);
+        data.setLines(lines);
+        futureChart.setInteractive(false);
+        futureChart.setZoomType(ZoomType.HORIZONTAL);
+        futureChart.setMaxZoom((float) 2);//最大方法比例
+        futureChart.setContainerScrollEnabled(true, ContainerScrollType.HORIZONTAL);
+        futureChart.setLineChartData(data);
+        futureChart.setVisibility(View.VISIBLE);
+        Viewport v = new Viewport(futureChart.getMaximumViewport());
+        v.left = 0;
+        v.right = 4;
+        futureChart.setCurrentViewport(v);
+    }
+
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^天气数据显示^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     /**
      * 获取图片
@@ -210,7 +394,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
                 Log.e(TAG, "onError: 失败");
             }
 
@@ -230,7 +413,6 @@ public class MainActivity extends AppCompatActivity {
      * 保存图片
      */
     private void saveImg() {
-
 
         //dhgdhdfh
         int a = 1;
