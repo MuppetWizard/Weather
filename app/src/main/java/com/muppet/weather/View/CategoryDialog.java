@@ -44,12 +44,12 @@ public class CategoryDialog extends Dialog {
         setCanceledOnTouchOutside(true);//点击窗口外是否关闭dialog
         ButterKnife.bind(this);
 
-        /*gvCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        gvCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
             }
-        });*/
+        });
         initData();
     }
 
@@ -58,6 +58,14 @@ public class CategoryDialog extends Dialog {
         categoryListAdapter = new CategoryListAdapter(mContext);
         gvCategory.setAdapter(categoryListAdapter);
 
+        getCategory();
+
+    }
+
+    /**
+     * 获取类别列表
+     */
+    private void getCategory() {
         RequestParams params = new RequestParams(IpAddress.getImgUrl(IpAddress.IMG_CATEGORY));
 
         x.http().post(params, new Callback.CommonCallback<CategoryList>() {
