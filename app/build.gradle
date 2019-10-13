@@ -54,4 +54,18 @@ MobSDK {
     appKey "2c8f0438ea66b"
     appSecret "4f461e04be19c66e79e4b1cfd2ccfe58"
     SMSSDK {}
+    ShareSDK{
+        //平台配置信息
+        devInfo{
+            Wechat {
+                appId "wx4868b35061f87885"
+                appSecret "64020361b8ec4c99936c0e3999a9f249"
+            }
+            QQ {
+                appId "100371282"
+                appKey "aed9b0303e3ed1e27bae87c33761161d"
+                shareByAppClient true
+            }
+        }
+    }
 }

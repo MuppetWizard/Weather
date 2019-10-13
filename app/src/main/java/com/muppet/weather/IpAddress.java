@@ -40,7 +40,10 @@ public class IpAddress {
 
     //注册
     public static final String REGISTER = "/uregister";
-
+    //忘记密码
+    public static  final  String FORGETPSWD= "/updatePwd";
+    //登录
+    public static  final  String LOGIN= "/login.action";
     //默认显示壁纸
     public static final String IMG_NORMAL = "/v1/vertical/vertical";
     //获取手机壁纸类别

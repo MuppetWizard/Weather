@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="71dp"
             android:layout_gravity="center"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="60dp"
             android:text="Welcome"
             android:textColor="#FFFFFF"
             android:textSize="50sp">
@@ -146,26 +146,28 @@
         android:layout_marginTop="60dp"
         android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
+        <!--        <LinearLayout-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_weight="1"-->
+        <!--            android:gravity="center"-->
+        <!--            android:orientation="vertical">-->
 
-            <ImageView
-                android:id="@+id/wechat_login"
-                android:layout_width="134dp"
-                android:layout_height="130dp"
-                android:src="@mipmap/wechat"></ImageView>
+        <!--            <ImageView-->
+        <!--                android:id="@+id/wechat_login"-->
+        <!--                android:layout_width="134dp"-->
+        <!--                android:layout_height="130dp"-->
+        <!--                android:src="@mipmap/wechat">-->
+        <!--            </ImageView>-->
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="微信一键登录"
-                android:textSize="18sp"></TextView>
-        </LinearLayout>
+        <!--            <TextView-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:gravity="center"-->
+        <!--                android:text="微信一键登录"-->
+        <!--                android:textSize="18sp">-->
+        <!--            </TextView>-->
+        <!--        </LinearLayout>-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -176,8 +178,8 @@
 
             <ImageView
                 android:id="@+id/qq_login"
-                android:layout_width="115dp"
-                android:layout_height="130dp"
+                android:layout_width="75dp"
+                android:layout_height="66dp"
                 android:src="@mipmap/qq"></ImageView>
 
             <TextView
