@@ -4,30 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.MainActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".Activity.MainActivity">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <ImageView
             android:id="@+id/iv_bg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
-            android:src="@mipmap/bgimg"/>
+            android:src="@mipmap/bgimg" />
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
+                    android:background="@color/app_transparent_black"
                     android:gravity="center"
-                    android:background="@color/app_transparent_black">
+                    android:orientation="vertical">
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="45dp">
@@ -36,20 +41,22 @@
                             android:id="@+id/city"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
+                            android:layout_centerInParent="true"
+                            android:gravity="center"
                             android:text="城市"
                             android:textColor="@color/app_White"
-                            android:gravity="center"
-                            android:layout_centerInParent="true"
-                            android:textSize="20sp"/>
+                            android:textSize="20sp" />
+
                         <ImageView
                             android:id="@+id/manage"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_alignParentEnd="true"
-                            android:src="@mipmap/options"
                             android:layout_centerVertical="true"
-                            android:layout_marginEnd="8dp"/>
+                            android:layout_marginEnd="8dp"
+                            android:src="@mipmap/options" />
                     </RelativeLayout>
+
                     <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
@@ -58,6 +65,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="vertical">
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="180dp"
@@ -87,7 +95,7 @@
                                             android:id="@+id/date_info"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:text="2019/5/27"
+                                            android:text="2019/9/27"
                                             android:textColor="@color/app_White"
                                             android:textSize="20dp" />
                                     </LinearLayout>
@@ -95,8 +103,8 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_toEndOf="@id/linear1"
                                         android:layout_marginTop="20dp"
+                                        android:layout_toEndOf="@id/linear1"
                                         android:text="℃"
                                         android:textColor="@color/app_White"
                                         android:textSize="40sp" />
@@ -106,16 +114,17 @@
                                     android:id="@+id/weather_status"
                                     android:layout_width="180dp"
                                     android:layout_height="130dp"
-                                    android:src="@mipmap/sunshine"
-                                    android:layout_marginTop="20dp"/>
+                                    android:layout_marginTop="20dp"
+                                    android:src="@mipmap/sunshine" />
                             </LinearLayout>
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/bg_weather"
-                                android:layout_marginTop="100dp"
                                 android:layout_marginStart="8dp"
-                                android:layout_marginEnd="8dp">
+                                android:layout_marginTop="100dp"
+                                android:layout_marginEnd="8dp"
+                                android:background="@drawable/bg_weather">
 
 
                                 <RelativeLayout
@@ -147,8 +156,8 @@
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:layout_marginStart="13dp"
-                                                android:text="风速"
                                                 android:layout_marginTop="8dp"
+                                                android:text="风速"
                                                 android:textColor="@color/app_White"
                                                 android:textSize="20sp" />
                                         </LinearLayout>
@@ -172,12 +181,13 @@
                                                 android:id="@+id/wind_direct"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
+                                                android:layout_gravity="end"
                                                 android:text="持续无风向"
                                                 android:textColor="@color/app_White"
-                                                android:textSize="18sp"
-                                                android:layout_gravity="end"/>
+                                                android:textSize="18sp" />
                                         </LinearLayout>
                                     </LinearLayout>
+
                                     <LinearLayout
                                         android:id="@+id/linear3"
                                         android:layout_width="wrap_content"
@@ -196,15 +206,15 @@
                                             <ImageView
                                                 android:layout_width="50dp"
                                                 android:layout_height="45dp"
-                                                android:src="@mipmap/aqi"
-                                                android:paddingStart="5dp"/>
+                                                android:paddingStart="5dp"
+                                                android:src="@mipmap/aqi" />
 
                                             <TextView
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
+                                                android:layout_marginTop="6dp"
                                                 android:paddingLeft="5dp"
                                                 android:text="空气质量"
-                                                android:layout_marginTop="6dp"
                                                 android:textColor="@color/app_White"
                                                 android:textSize="20sp" />
                                         </LinearLayout>
@@ -220,7 +230,7 @@
                                                 android:id="@+id/wind_aqi"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
-                                                android:layout_marginStart="30dp"
+                                                android:layout_marginStart="10dp"
                                                 android:text="80"
                                                 android:textColor="@color/app_White"
                                                 android:textSize="20sp" />
@@ -245,15 +255,15 @@
                                             <ImageView
                                                 android:layout_width="40dp"
                                                 android:layout_height="40dp"
-                                                android:src="@mipmap/humidity"
-                                                android:layout_marginStart="13dp"/>
+                                                android:layout_marginStart="13dp"
+                                                android:src="@mipmap/humidity" />
 
                                             <TextView
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:layout_marginStart="13dp"
-                                                android:text="湿度"
                                                 android:layout_marginTop="8dp"
+                                                android:text="湿度"
                                                 android:textColor="@color/app_White"
                                                 android:textSize="20sp" />
                                         </LinearLayout>
@@ -269,11 +279,11 @@
                                                 android:id="@+id/wind_humidity"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
+                                                android:layout_gravity="end"
                                                 android:layout_marginStart="18dp"
                                                 android:text="180%"
                                                 android:textColor="@color/app_White"
-                                                android:textSize="20sp"
-                                                android:layout_gravity="end"/>
+                                                android:textSize="20sp" />
                                         </LinearLayout>
                                     </LinearLayout>
 
@@ -296,15 +306,15 @@
                                             <ImageView
                                                 android:layout_width="40dp"
                                                 android:layout_height="40dp"
-                                                android:src="@mipmap/uv"
-                                                android:paddingLeft="5dp"/>
+                                                android:paddingLeft="5dp"
+                                                android:src="@mipmap/uv" />
 
                                             <TextView
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
+                                                android:layout_marginTop="8dp"
                                                 android:paddingLeft="5dp"
                                                 android:text="紫外线指数"
-                                                android:layout_marginTop="8dp"
                                                 android:textColor="@color/app_White"
                                                 android:textSize="20sp" />
                                         </LinearLayout>
@@ -320,7 +330,7 @@
                                                 android:id="@+id/ziwaixian"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
-                                                android:layout_marginStart="40dp"
+                                                android:layout_marginStart="10dp"
                                                 android:text="3"
                                                 android:textColor="@color/app_White"
                                                 android:textSize="20sp" />
@@ -332,11 +342,11 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:orientation="vertical"
-                                android:background="@drawable/bg_weather"
-                                android:layout_marginTop="20dp"
                                 android:layout_marginStart="8dp"
-                                android:layout_marginEnd="8dp">
+                                android:layout_marginTop="20dp"
+                                android:layout_marginEnd="8dp"
+                                android:background="@drawable/bg_weather"
+                                android:orientation="vertical">
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -460,28 +470,61 @@
                                     android:id="@+id/future_chart"
                                     android:layout_width="360dp"
                                     android:layout_height="130dp"
-                                    android:layout_marginBottom="10dp"
-                                    android:layout_gravity="center" />
+                                    android:layout_gravity="center"
+                                    android:layout_marginBottom="10dp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginTop="20dp"
+                                android:layout_marginEnd="8dp"
+                                android:background="@drawable/bg_weather"
+                                android:orientation="vertical">
+
+                                <ListView
+                                    android:id="@+id/lv_news"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"/>
+                                <View
+                                    android:layout_width="300dp"
+                                    android:layout_height="1dp"
+                                    android:background="@color/app_Gray"
+                                    android:layout_gravity="center_horizontal"/>
+                                <TextView
+                                    android:id="@+id/tv_footView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_margin="10dp"
+                                    android:text="查看更多"
+                                    android:textSize="18sp"
+                                    android:textColor="@color/app_White"/>
                             </LinearLayout>
                         </LinearLayout>
                     </FrameLayout>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="今天天气"
-                        android:textSize="30sp"
                         android:layout_gravity="center"
-                        android:textColor="@color/app_White"/>
+                        android:text="今天天气"
+                        android:textColor="@color/app_White"
+                        android:textSize="30sp" />
+
                     <Button
                         android:id="@+id/btn_changeImg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="更换壁纸"/>
+                        android:text="更换壁纸" />
+
                     <Button
                         android:id="@+id/btn_category"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="选择类别"/>
+                        android:text="选择类别" />
+
                 </LinearLayout>
             </ScrollView>
 

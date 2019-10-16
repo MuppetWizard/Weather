@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
     private int changeImg = Constant.NORMAL_ZERO;
     private CategoryDialog categoryDialog;
     private Date date;
-    private String mCity = "成都";
+    private String mCity = "成都";//默认
     private List<Weather.ResultBean.FutureBean> mFutureData;
     private Weather.ResultBean.RealtimeBean mWeather;
 
