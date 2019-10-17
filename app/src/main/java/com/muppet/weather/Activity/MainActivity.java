@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -471,7 +472,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @OnClick({R.id.btn_changeImg, R.id.btn_category, R.id.tv_footView})
+    @OnClick({R.id.btn_changeImg, R.id.btn_category, R.id.tv_footView,R.id.manage})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_changeImg:
@@ -494,6 +495,11 @@ public class MainActivity extends AppCompatActivity {
                     tvFootView.setText("查看更多");
                     newsLIstAdapter.notifyDataSetChanged();
                 }
+                break;
+            case R.id.manage:
+                View popupView = this.getLayoutInflater().inflate(R.layout.popupwindow_option, null);
+                final PopupWindow window = new PopupWindow(popupView,300,200);
+                TextView tvSaveImg = popupView.findViewById(R.id.tv_saveImg);
                 break;
         }
     }
