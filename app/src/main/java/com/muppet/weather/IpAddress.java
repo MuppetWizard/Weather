@@ -7,6 +7,7 @@ public class IpAddress {
     private static final String Server_IP = "http://xiaogou.free.idcfengye.com";
     private static final String Img_Server_IP = "http://service.picasso.adesk.com";//壁纸
     private static final String Weather_Server_IP = "http://apis.juhe.cn";//聚合天气
+    private static final String News_Server_IP = "http://v.juhe.cn";//聚合新闻
 
     public static boolean isDebug = false ; //是否为调试模式
 
@@ -41,6 +42,15 @@ public class IpAddress {
         return stringBuilder.toString();
     }
 
+    //新闻
+    public static String getNewsUrl(@NonNull String url) {
+        StringBuilder stringBuilder = new StringBuilder(News_Server_IP);
+        if (!url.startsWith("/")) {
+            stringBuilder.append("/");
+        }
+        stringBuilder.append(url);
+        return stringBuilder.toString();
+    }
     //注册
     public static final String REGISTER = "/uregister";
 
@@ -51,4 +61,6 @@ public class IpAddress {
 
     //天气
     public static final String WEATHER = "/simpleWeather/query";
+    //新闻
+    public static final String NEWS = "/toutiao/index";
 }

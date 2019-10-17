@@ -2,16 +2,18 @@ package com.muppet.weather.Activity;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.muppet.weather.Adapter.NewsLIstAdapter;
 import com.muppet.weather.IpAddress;
+import com.muppet.weather.Model.NewsList;
 import com.muppet.weather.Model.NormalImg;
 import com.muppet.weather.Model.Weather;
 import com.muppet.weather.R;
@@ -19,6 +21,7 @@ import com.muppet.weather.Utils.Constant;
 import com.muppet.weather.Utils.ToastUtil;
 import com.muppet.weather.Utils.Utils;
 import com.muppet.weather.View.CategoryDialog;
+import com.muppet.weather.View.ListViewForScrollView;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
@@ -93,6 +96,12 @@ public class MainActivity extends AppCompatActivity {
     TextView futureDate04;
     @BindView(R.id.future_chart)
     LineChartView futureChart;
+    @BindView(R.id.tv_footView)
+    TextView tvFootView;
+    @BindView(R.id.lv_news)
+    ListViewForScrollView lvNews;
+    @BindView(R.id.sv)
+    ScrollView sv;
 
     private String TAG = "123";
     //第几张图片
@@ -101,7 +110,9 @@ public class MainActivity extends AppCompatActivity {
     private Date date;
     private String mCity = "成都";//默认
     private List<Weather.ResultBean.FutureBean> mFutureData;
+    private List<NewsList.ResultBean.DataBean> mNewsData;
     private Weather.ResultBean.RealtimeBean mWeather;
+    private NewsLIstAdapter newsLIstAdapter;
 
     private List<Integer> FutureTemp;
     private List<PointValue> mPointValues = new ArrayList<PointValue>();
@@ -117,8 +128,47 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        newsLIstAdapter = new NewsLIstAdapter(this);
+        lvNews.setAdapter(newsLIstAdapter);
+        sv.smoothScrollTo(0,0);//调整scrollview位置
         getBgImg();
         getWeather();
+        getNewsList();
+    }
+
+    private void getNewsList() {
+
+        mNewsData = new ArrayList<>();
+        RequestParams params = new RequestParams(IpAddress.getNewsUrl(IpAddress.NEWS));
+        params.addParameter("key", Constant.NEWS_KEY);
+        params.addParameter("type", "hot");
+        x.http().post(params, new Callback.CommonCallback<NewsList>() {
+            @Override
+            public void onSuccess(NewsList result) {
+                if (result != null) {
+                    NewsList.ResultBean resultBean = result.getResult();
+                    if (resultBean != null) {
+                        mNewsData = resultBean.getData();
+                        newsLIstAdapter.setDate(mNewsData);
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                ToastUtil.showMessage("新闻请求失败或网络出现问题");
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     /**
@@ -150,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                ToastUtil.showMessage("天气请求失败或网络出现问题");
             }
 
             @Override
@@ -231,7 +281,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         for (int i = 0; i < mFutureData.size(); i++) {
-            String day =  mFutureData.get(i).getWid().getDay();
+            String day = mFutureData.get(i).getWid().getDay();
             //未来天气数据设置
             setFutureData(day, i);
         }
@@ -239,6 +289,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * 设置未来天气
+     *
      * @param day
      * @param i
      */
@@ -262,8 +313,8 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         if (imageView != null) {
-            setFutureImg(imageView,day);
-        }else {
+            setFutureImg(imageView, day);
+        } else {
             ToastUtil.showMessage("出现错误");
         }
         //未来时间
@@ -277,6 +328,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * 设置未来天气图片
+     *
      * @param imageView
      * @param day
      */
@@ -384,7 +436,6 @@ public class MainActivity extends AppCompatActivity {
                 if (result != null) {
                     List<NormalImg.ResBean.VerticalBean> list = result.getRes().getVertical();
 
-                    Log.d(TAG, "onSuccess: " + list.get(0).getImg());
                     Glide.with(MainActivity.this).load(list.get(0).getImg())
                             .error(getResources().getDrawable(R.mipmap.ic_launcher))
                             .into(ivBg);
@@ -394,7 +445,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                Log.e(TAG, "onError: 失败");
+                ToastUtil.showMessage("壁纸请求失败或网络出现问题");
             }
 
             @Override
@@ -418,10 +469,9 @@ public class MainActivity extends AppCompatActivity {
         int a = 1;
         int b = 2;
 
-
     }
 
-    @OnClick({R.id.btn_changeImg, R.id.btn_category})
+    @OnClick({R.id.btn_changeImg, R.id.btn_category, R.id.tv_footView})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_changeImg:
@@ -434,6 +484,18 @@ public class MainActivity extends AppCompatActivity {
                 }
                 categoryDialog.show();
                 break;
+            case R.id.tv_footView:
+                if (newsLIstAdapter.getCount() == 3) {
+                    newsLIstAdapter.addItemNum(mNewsData.size());
+                    tvFootView.setText("收起");
+                    newsLIstAdapter.notifyDataSetChanged();
+                } else {
+                    newsLIstAdapter.addItemNum(3);
+                    tvFootView.setText("查看更多");
+                    newsLIstAdapter.notifyDataSetChanged();
+                }
+                break;
         }
     }
+
 }

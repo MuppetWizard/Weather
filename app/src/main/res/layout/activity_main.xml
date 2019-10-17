@@ -20,42 +20,45 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/app_transparent_black">
 
-            <ScrollView
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="45dp">
+
+                <TextView
+                    android:id="@+id/city"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:text="城市"
+                    android:textColor="@color/app_White"
+                    android:textSize="20sp" />
+
+                <ImageView
+                    android:id="@+id/manage"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="8dp"
+                    android:src="@mipmap/options" />
+            </RelativeLayout>
+            <ScrollView
+                android:id="@+id/sv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="45dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/app_transparent_black"
                     android:gravity="center"
                     android:orientation="vertical">
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="45dp">
 
-                        <TextView
-                            android:id="@+id/city"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_centerInParent="true"
-                            android:gravity="center"
-                            android:text="城市"
-                            android:textColor="@color/app_White"
-                            android:textSize="20sp" />
-
-                        <ImageView
-                            android:id="@+id/manage"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginEnd="8dp"
-                            android:src="@mipmap/options" />
-                    </RelativeLayout>
 
                     <FrameLayout
                         android:layout_width="match_parent"
@@ -482,8 +485,20 @@
                                 android:layout_marginEnd="8dp"
                                 android:background="@drawable/bg_weather"
                                 android:orientation="vertical">
-
-                                <ListView
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="10dp"
+                                    android:layout_gravity="center_horizontal"
+                                    android:text="最新资讯"
+                                    android:textSize="18sp"
+                                    android:textColor="@color/app_White"/>
+                                <View
+                                    android:layout_width="370dp"
+                                    android:layout_height="1dp"
+                                    android:background="@color/app_Gray"
+                                    android:layout_gravity="center_horizontal"/>
+                                <com.muppet.weather.View.ListViewForScrollView
                                     android:id="@+id/lv_news"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"/>
