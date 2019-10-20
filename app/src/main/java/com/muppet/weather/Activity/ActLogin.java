@@ -4,17 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.URLSpan;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,6 +26,7 @@ import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 import java.util.HashMap;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -39,12 +38,11 @@ import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.PlatformDb;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.tencent.qq.QQ;
-import cn.sharesdk.wechat.friends.Wechat;
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 import cn.smssdk.gui.RegisterPage;
 
-public class ActLogin extends AppCompatActivity implements PlatformActionListener{
+public class ActLogin extends AppCompatActivity implements PlatformActionListener {
 
     @BindView(R.id.user_login)
     EditText userLogin;
@@ -60,56 +58,59 @@ public class ActLogin extends AppCompatActivity implements PlatformActionListene
     Button login;
     @BindView(R.id.userread_login)
     TextView userreadLogin;
-//    @BindView(R.id.wechat_login)
+    //    @BindView(R.id.wechat_login)
 //    ImageView wechatLogin;
     @BindView(R.id.qq_login)
     ImageView qqLogin;
+    @BindView(R.id.rememberPswd)
+    CheckBox rememberPswd;
     private EventHandler handler;
     private PlatformDb platDB;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_login);
         ButterKnife.bind(this);
         SpannableString spannableString = new SpannableString("登录即同意《用户协议》和《隐私政策》");
-        ClickableSpan clickableSpan  = new ClickableSpan() {
+        ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(@NonNull View widget) {
-                Intent intent= new Intent();
+                Intent intent = new Intent();
                 intent.setAction("android.intent.action.VIEW");
                 Uri content_url = Uri.parse("http://www.moji.com/about/agreement/");
                 intent.setData(content_url);
                 startActivity(intent);
             }
-            public void updateDrawState(TextPaint ds){
-                ds.setColor(ContextCompat.getColor(ActLogin.this,R.color.colorPrimary)); //设置颜色
+
+            public void updateDrawState(TextPaint ds) {
+                ds.setColor(ContextCompat.getColor(ActLogin.this, R.color.colorPrimary)); //设置颜色
                 ds.setUnderlineText(false);//去下划线
             }
         };
-        spannableString.setSpan(clickableSpan,5,11, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+        spannableString.setSpan(clickableSpan, 5, 11, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
 
         ClickableSpan clickableSpan2 = new ClickableSpan() {
             @Override
             public void onClick(@NonNull View widget) {
-                Intent intent= new Intent();
+                Intent intent = new Intent();
                 intent.setAction("android.intent.action.VIEW");
                 Uri content_url = Uri.parse("http://www.moji.com/about/agreement/");
                 intent.setData(content_url);
                 startActivity(intent);
             }
-            public void  updateDrawState(TextPaint ds){
-                ds.setColor(ContextCompat.getColor(ActLogin.this,R.color.colorPrimary)); //设置颜色
+
+            public void updateDrawState(TextPaint ds) {
+                ds.setColor(ContextCompat.getColor(ActLogin.this, R.color.colorPrimary)); //设置颜色
                 ds.setUnderlineText(false);//去下划线
             }
         };
-        spannableString.setSpan(clickableSpan2,12,18,Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+        spannableString.setSpan(clickableSpan2, 12, 18, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
 
-        ForegroundColorSpan colorSpan = new ForegroundColorSpan(ContextCompat.getColor(this,R.color.colorPrimary));
-        spannableString.setSpan(colorSpan,5,11,Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+        ForegroundColorSpan colorSpan = new ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorPrimary));
+        spannableString.setSpan(colorSpan, 5, 11, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
 
-        ForegroundColorSpan colorSpan2 = new ForegroundColorSpan(ContextCompat.getColor(this,R.color.colorPrimary));
-        spannableString.setSpan(colorSpan2,12,18,Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+        ForegroundColorSpan colorSpan2 = new ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorPrimary));
+        spannableString.setSpan(colorSpan2, 12, 18, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
 
         userreadLogin.setText(spannableString);
         userreadLogin.setMovementMethod(LinkMovementMethod.getInstance());
@@ -125,7 +126,7 @@ public class ActLogin extends AppCompatActivity implements PlatformActionListene
                 forgetLogin(this);
                 break;
             case R.id.register_button_login:
-                Intent intent = new Intent(ActLogin.this,ActRegister.class);
+                Intent intent = new Intent(ActLogin.this, ActRegister.class);
                 startActivity(intent);
                 break;
             case R.id.login:
@@ -154,24 +155,26 @@ public class ActLogin extends AppCompatActivity implements PlatformActionListene
         String username = userLogin.getText().toString();
         String password = pswdLogin.getText().toString();
         RequestParams params = new RequestParams(IpAddress.getUrl(IpAddress.LOGIN));
-        params.addParameter("user_name",username);
-        params.addParameter("password",password);
+        params.addParameter("user_name", username);
+        params.addParameter("password", password);
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                if (result.toString().equals("登录成功")){
+                if (result.toString().equals("登录成功")) {
                     ToastUtil.showMessage("登录成功");
-                }
-                else {
+                } else {
                     ToastUtil.showMessage("登录失败");
                 }
             }
+
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
             }
+
             @Override
             public void onCancelled(CancelledException cex) {
             }
+
             @Override
             public void onFinished() {
             }
@@ -181,17 +184,16 @@ public class ActLogin extends AppCompatActivity implements PlatformActionListene
     private void forgetLogin(Context context) {
         RegisterPage page = new RegisterPage();
         page.setTempCode(null); //没有申请短信模板编号
-        page.setRegisterCallback(new EventHandler(){
-            public void afterEvent(int event, int result, Object data){
-                if (result == SMSSDK.RESULT_COMPLETE){
+        page.setRegisterCallback(new EventHandler() {
+            public void afterEvent(int event, int result, Object data) {
+                if (result == SMSSDK.RESULT_COMPLETE) {
                     //处理成功结果
-                    HashMap<String,Object> phoneMap = (HashMap<String, Object>) data;
+                    HashMap<String, Object> phoneMap = (HashMap<String, Object>) data;
                     String phone = (String) phoneMap.get("phone");
-                    Intent intent = new Intent(ActLogin.this,Forgetpswd.class);
-                    intent.putExtra("phone",phone);
+                    Intent intent = new Intent(ActLogin.this, Forgetpswd.class);
+                    intent.putExtra("phone", phone);
                     startActivity(intent);
-                }
-                else {
+                } else {
                     ToastUtil.showMessage("请使用正确手机号");
                 }
             }
@@ -203,16 +205,15 @@ public class ActLogin extends AppCompatActivity implements PlatformActionListene
     private void msgLogin(Context context) {
         RegisterPage page = new RegisterPage();
         page.setTempCode(null); //没有申请短信模板编号
-        page.setRegisterCallback(new EventHandler(){
-            public void afterEvent(int event, int result, Object data){
-                if (result == SMSSDK.RESULT_COMPLETE){
+        page.setRegisterCallback(new EventHandler() {
+            public void afterEvent(int event, int result, Object data) {
+                if (result == SMSSDK.RESULT_COMPLETE) {
                     //处理成功结果
 //                    HashMap<String,Object> phoneMap = (HashMap<String, Object>) data;
-                    Intent intent = new Intent(ActLogin.this,MainActivity.class);
+                    Intent intent = new Intent(ActLogin.this, MainActivity.class);
                     startActivity(intent);
                     finish();
-                }
-                else {
+                } else {
                     ToastUtil.showMessage("请使用正确手机号");
                 }
             }
@@ -221,7 +222,7 @@ public class ActLogin extends AppCompatActivity implements PlatformActionListene
     }
 
     private void authorize(Platform plat) {
-        if (plat == null){
+        if (plat == null) {
             ToastUtil.showMessage("空");
         }
         plat.removeAccount(true);//移除授权状态和本地缓存，下次授权会重新授权
@@ -230,6 +231,7 @@ public class ActLogin extends AppCompatActivity implements PlatformActionListene
         //plat.authorize();
         plat.showUser(null);//// 参数null表示获取当前授权用户资料
     }
+
     @Override
     public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
         String headImageUrl = null; //头像
@@ -238,7 +240,7 @@ public class ActLogin extends AppCompatActivity implements PlatformActionListene
         String userId;
         String name = null;//用户名
         // 微信返回数据是打包的
-        if(i == Platform.ACTION_USER_INFOR){
+        if (i == Platform.ACTION_USER_INFOR) {
             platDB = platform.getDb();//获取平台数据DB
 //            if (platform.getName().equals(Wechat.NAME)){
 //                //通过DB获取数据
@@ -248,7 +250,7 @@ public class ActLogin extends AppCompatActivity implements PlatformActionListene
 //                gender = platDB.getUserGender();
 //                headImageUrl = platDB.getUserIcon();
 //            }
-            if (platform.getName().equals(QQ.NAME)){
+            if (platform.getName().equals(QQ.NAME)) {
                 token = platDB.getToken();
                 userId = platDB.getUserId();
                 name = hashMap.get("nickname").toString();//用户名
@@ -256,7 +258,8 @@ public class ActLogin extends AppCompatActivity implements PlatformActionListene
                 headImageUrl = hashMap.get("figureurl_qq_2").toString();
                 String city = hashMap.get("city").toString();
                 String province = hashMap.get("province").toString();
-
+//              Intent intent = new Intent(this,MainActivity.class);
+//              startActivity(intent);
             }
         }
     }
@@ -269,5 +272,10 @@ public class ActLogin extends AppCompatActivity implements PlatformActionListene
     @Override
     public void onCancel(Platform platform, int i) {
 
+    }
+
+    @OnClick(R.id.rememberPswd)
+    public void onViewClicked() {
+      //1  ToastUtil.showMessage("sssssss");
     }
 }
