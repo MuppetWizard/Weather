@@ -1,18 +1,26 @@
 package com.muppet.weather.Activity;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.navigation.NavigationView;
 import com.muppet.weather.Adapter.NewsLIstAdapter;
 import com.muppet.weather.IpAddress;
 import com.muppet.weather.Model.NewsList;
@@ -120,13 +128,111 @@ public class MainActivity extends AppCompatActivity {
     private List<PointValue> mPointValues = new ArrayList<PointValue>();
     private List<String> futureC;
 
+    //我的页面
+    private NavigationView navigationView;
+    private DrawerLayout drawerLayout;
+    private SharedPreferences sharedPreferences;
+    private MenuItem menuItem;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        initMyActvity();
         //初始化
         initView();
+    }
+
+    private void initMyActvity() {
+        Intent intent = getIntent();
+        String username = intent.getStringExtra("username");
+        navigationView = findViewById(R.id.navigation);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        View headerLayout = navigationView.inflateHeaderView(R.layout.drawer_layout_left_head);
+        TextView my_nickname = headerLayout.findViewById(R.id.my_nickname);
+        ImageView my_icon = headerLayout.findViewById(R.id.my_icon);
+        //判断登录没
+        sharedPreferences = getSharedPreferences("user_info",MODE_PRIVATE);
+        String userID = sharedPreferences.getString("userID",null);
+        if (userID != null){
+            //隐藏视图
+            menuItem = navigationView.getMenu().findItem(R.id.nav_outlogin);
+            menuItem.setVisible(false);
+            menuItem = navigationView.getMenu().findItem(R.id.nav_commoncity);
+            menuItem.setVisible(false);
+            my_nickname.setText("未登录");
+            my_icon.setImageResource(R.mipmap.not_logged);
+            headerLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(MainActivity.this,ActLogin.class));
+                    drawerLayout.closeDrawer(Gravity.LEFT);
+                    finish();
+                }
+            });
+        }else {
+            String nickname = sharedPreferences.getString("nickname", null);
+            String myIcon = sharedPreferences.getString("myIcon", null);
+            my_nickname.setText("你好啊");
+            Glide.with(this).load("http://cdn.duitang.com/uploads/item/201409/08/20140908155026_RdUwH.thumb.700_0.jpeg").into(my_icon);
+            headerLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(MainActivity.this,ModifyMyInfoActivity.class));
+                    drawerLayout.closeDrawer(Gravity.LEFT);
+                    finish();
+                }
+            });
+        }
+        String goback = getIntent().getStringExtra("goback");
+        if (goback != null){
+            drawerLayout.openDrawer(Gravity.LEFT);
+        }
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                switch (item.getItemId()){
+                    case R.id.nav_commoncity:
+                        Intent intent = new Intent(MainActivity.this,CommonCityActivity.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.nav_outlogin:
+                        //删除数据
+                        Toast.makeText(MainActivity.this, "删除SharedPreferences中的数据", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+                drawerLayout.closeDrawer(Gravity.LEFT);
+                return false;
+            }
+        });
+        DrawerLayout.DrawerListener drawerListener = new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                // 得到contentView 实现侧滑界面出现后主界面向右平移避免侧滑界面遮住主界面
+                View content = drawerLayout.getChildAt(0);
+                int offset = (int) (drawerView.getWidth() * slideOffset);
+                content.setTranslationX(offset);
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                //打开侧滑界面触发
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                //关闭侧滑界面触发
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                //状态改变时触发
+            }
+        };
+        drawerLayout.addDrawerListener(drawerListener);
+        //drawerLayout.setScrimColor(Color.TRANSPARENT);//去除侧滑时的阴影
     }
 
     private void initView() {

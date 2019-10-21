@@ -40,9 +40,11 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.android.support:appcompat-v7:28.+'
-
+    implementation 'com.android.support:design:28.+'
     implementation 'com.jakewharton:butterknife:10.2.0' //黄油刀
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.0'
+
+    implementation 'de.hdodenhof:circleimageview:2.1.0'//圆形图片
 
     implementation 'com.github.bumptech.glide:glide:3.7.0'
     implementation 'org.xutils:xutils:3.5.1'
@@ -54,9 +56,9 @@ MobSDK {
     appKey "2c8f0438ea66b"
     appSecret "4f461e04be19c66e79e4b1cfd2ccfe58"
     SMSSDK {}
-    ShareSDK{
+    ShareSDK {
         //平台配置信息
-        devInfo{
+        devInfo {
             QQ {
                 appId "101811658"
                 appKey "eb9b44987eb522741ae96c0262d0d07f"
