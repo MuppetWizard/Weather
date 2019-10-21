@@ -1,6 +1,7 @@
 package com.muppet.weather.Activity;
 
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -498,8 +499,39 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.manage:
                 View popupView = this.getLayoutInflater().inflate(R.layout.popupwindow_option, null);
-                final PopupWindow window = new PopupWindow(popupView,300,200);
+                final PopupWindow window = new PopupWindow(popupView,450,400);
                 TextView tvSaveImg = popupView.findViewById(R.id.tv_saveImg);
+                TextView tvChangeImg = popupView.findViewById(R.id.tv_changeImg);
+                TextView tvCategory = popupView.findViewById(R.id.tv_category);
+                tvSaveImg.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //
+                        window.dismiss();
+                    }
+                });
+                tvChangeImg.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        changeImg += 1;
+                        getBgImg();
+                        window.dismiss();
+                    }
+                });
+                tvCategory.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if (categoryDialog == null) {
+                            categoryDialog = new CategoryDialog(MainActivity.this);
+                        }
+                        categoryDialog.show();
+                        window.dismiss();
+                    }
+                });
+                window.setFocusable(true);
+                window.update();
+                window.showAsDropDown(manage,0,0);
                 break;
         }
     }
