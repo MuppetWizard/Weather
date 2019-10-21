@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single"
-        android:id="@+id/nav_item2">
+    <group
+        android:id="@+id/nav_item2"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/nav_commoncity"
             android:icon="@mipmap/common_city"
-            android:title="      常 用 城 市"/>
+            android:title="      常 用 城 市" />
     </group>
-    <group android:checkableBehavior="single"
-        android:id="@+id/nav_item4">
+    <group
+        android:id="@+id/nav_item4"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/nav_outlogin"
             android:icon="@mipmap/out_logged"
-            android:title="      退 出 登 录"/>
+            android:title="      退 出 登 录" />
     </group>
 </menu>

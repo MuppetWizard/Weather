@@ -555,12 +555,13 @@
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigation"
-        android:layout_width="300dp"
+        android:layout_width="250dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:menu="@menu/navigation_menu">
+        android:background="@color/app_White"
+        app:menu="@menu/navigation_menu"
+        app:itemTextColor="@color/app_Dark"/>
 
-    </com.google.android.material.navigation.NavigationView>
 
 
 
