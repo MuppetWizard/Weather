@@ -45,6 +45,7 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Optional;
 import lecho.lib.hellocharts.gesture.ContainerScrollType;
 import lecho.lib.hellocharts.gesture.ZoomType;
 import lecho.lib.hellocharts.model.Line;
@@ -143,9 +144,16 @@ public class MainActivity extends AppCompatActivity {
     private void initMyActvity() {
         navigationView = findViewById(R.id.navigation);
         drawerLayout = findViewById(R.id.drawer_layout);
+        String goback = getIntent().getStringExtra("goback");
+        if (goback != null) {
+            drawerLayout.openDrawer(Gravity.LEFT);
+        }
         View headerLayout = navigationView.inflateHeaderView(R.layout.drawer_layout_left_head);
         TextView my_nickname = headerLayout.findViewById(R.id.my_nickname);
         ImageView my_icon = headerLayout.findViewById(R.id.my_icon);
+
+        String phone = getIntent().getStringExtra("phone");
+
         //判断登录没
         sharedPreferences = getSharedPreferences("user_info", MODE_PRIVATE);
         String userID = sharedPreferences.getString("userID", null);
@@ -166,6 +174,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         } else {
+
             String nickname = sharedPreferences.getString("nickname", null);
             String myIcon = sharedPreferences.getString("myIcon", null);
             my_nickname.setText("你好啊");
@@ -185,10 +194,6 @@ public class MainActivity extends AppCompatActivity {
                 drawerLayout.openDrawer(Gravity.LEFT);
             }
         });
-        String goback = getIntent().getStringExtra("goback");
-        if (goback != null) {
-            drawerLayout.openDrawer(Gravity.LEFT);
-        }
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -207,33 +212,6 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
-        /*DrawerLayout.DrawerListener drawerListener = new DrawerLayout.DrawerListener() {
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-                // 得到contentView 实现侧滑界面出现后主界面向右平移避免侧滑界面遮住主界面
-                View content = drawerLayout.getChildAt(0);
-                int offset = (int) (drawerView.getWidth() * slideOffset);
-                content.setTranslationX(offset);
-            }
-
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                //打开侧滑界面触发
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                //关闭侧滑界面触发
-            }
-
-            @Override
-            public void onDrawerStateChanged(int newState) {
-                //状态改变时触发
-            }
-        };
-        drawerLayout.addDrawerListener(drawerListener);
-        //drawerLayout.setScrimColor(Color.TRANSPARENT);//去除侧滑时的阴影
-    }*/
     }
 
     private void initView() {

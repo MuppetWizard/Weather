@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,10 +27,12 @@ import butterknife.OnClick;
 
 public class CommonCityActivity extends AppCompatActivity {
 
-    @BindView(R.id.go_back)
-    ImageView goBack;
     @BindView(R.id.recycler_common_city)
     RecyclerView recyclerCommonCity;
+    @BindView(R.id.city)
+    TextView city;
+    @BindView(R.id.lv_back)
+    ImageView lvBack;
     private SwipeToDismissWrapper mSwipeToDismissWrapper;
     private List<String> mDataList = new ArrayList<>();
 
@@ -79,10 +83,10 @@ public class CommonCityActivity extends AppCompatActivity {
         }
     }
 
-    @OnClick({R.id.go_back})
+    @OnClick(R.id.lv_back)
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.go_back:
+            case R.id.lv_back:
                 Intent intent = new Intent();
                 intent.putExtra("goback", "返回");
                 intent.setClass(this, MainActivity.class);
