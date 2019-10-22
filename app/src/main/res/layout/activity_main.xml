@@ -550,8 +550,9 @@
         android:layout_width="250dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/app_Dark"
+        android:background="@color/app_White"
         app:itemTextColor="@color/app_Dark"
+        app:itemIconTint="@color/app_Dark"
         app:menu="@menu/navigation_menu" />
 
 
