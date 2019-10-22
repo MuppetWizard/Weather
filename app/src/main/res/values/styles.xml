@@ -22,4 +22,8 @@
         <!-- 设置背景模糊的透明度-->
         <item name="android:backgroundDimAmount">0.8</item>
     </style>
+    <style name="MyCheckBox">
+        <item name="android:colorControlNormal">@color/app_Gray</item>
+        <item name="android:colorControlActivated">@color/app_primary</item>
+    </style>
 </resources>

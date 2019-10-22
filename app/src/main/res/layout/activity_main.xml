@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/drawer_layout"
     tools:context=".Activity.MainActivity">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -32,6 +32,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="45dp">
 
+                    <ImageView
+                        android:id="@+id/iv_personal"
+                        android:layout_width="30dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="8dp"
+                        android:src="@mipmap/selection" />
                     <TextView
                         android:id="@+id/city"
                         android:layout_width="wrap_content"
@@ -51,6 +59,7 @@
                         android:layout_marginEnd="8dp"
                         android:src="@mipmap/options" />
                 </RelativeLayout>
+
                 <ScrollView
                     android:id="@+id/sv"
                     android:layout_width="match_parent"
@@ -62,7 +71,6 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:orientation="vertical">
-
 
 
                         <FrameLayout
@@ -95,7 +103,7 @@
                                                 android:id="@+id/temperature"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
-                                                android:text="30"
+                                                android:text="00"
                                                 android:textColor="@color/app_White"
                                                 android:textSize="90sp" />
 
@@ -103,7 +111,7 @@
                                                 android:id="@+id/date_info"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
-                                                android:text="2019/9/27"
+                                                android:text="0000/0/00"
                                                 android:textColor="@color/app_White"
                                                 android:textSize="20dp" />
                                         </LinearLayout>
@@ -181,7 +189,7 @@
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
                                                     android:layout_gravity="end"
-                                                    android:text="四级"
+                                                    android:text="..."
                                                     android:textColor="@color/app_White"
                                                     android:textSize="18sp" />
 
@@ -190,7 +198,7 @@
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
                                                     android:layout_gravity="end"
-                                                    android:text="持续无风向"
+                                                    android:text="未知"
                                                     android:textColor="@color/app_White"
                                                     android:textSize="18sp" />
                                             </LinearLayout>
@@ -239,7 +247,7 @@
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
                                                     android:layout_marginStart="10dp"
-                                                    android:text="80"
+                                                    android:text="00"
                                                     android:textColor="@color/app_White"
                                                     android:textSize="20sp" />
                                             </LinearLayout>
@@ -339,7 +347,7 @@
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
                                                     android:layout_marginStart="10dp"
-                                                    android:text="3"
+                                                    android:text="00"
                                                     android:textColor="@color/app_White"
                                                     android:textSize="20sp" />
                                             </LinearLayout>
@@ -424,7 +432,7 @@
                                                 android:layout_height="wrap_content"
                                                 android:layout_below="@id/future_img03"
                                                 android:gravity="center"
-                                                android:text="今天"
+                                                android:text="未知"
                                                 android:textColor="@color/app_White"
                                                 android:textSize="18sp" />
                                         </RelativeLayout>
@@ -446,7 +454,7 @@
                                                 android:layout_height="wrap_content"
                                                 android:layout_below="@id/future_img04"
                                                 android:gravity="center"
-                                                android:text="今天"
+                                                android:text="未知"
                                                 android:textColor="@color/app_White"
                                                 android:textSize="18sp" />
                                         </RelativeLayout>
@@ -468,7 +476,7 @@
                                                 android:layout_height="wrap_content"
                                                 android:layout_below="@id/future_img05"
                                                 android:gravity="center"
-                                                android:text="今天"
+                                                android:text="未知"
                                                 android:textColor="@color/app_White"
                                                 android:textSize="18sp" />
                                         </RelativeLayout>
@@ -488,30 +496,36 @@
                                     android:layout_marginStart="8dp"
                                     android:layout_marginTop="20dp"
                                     android:layout_marginEnd="8dp"
+                                    android:layout_marginBottom="20dp"
                                     android:background="@drawable/bg_weather"
                                     android:orientation="vertical">
+
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_margin="10dp"
                                         android:layout_gravity="center_horizontal"
+                                        android:layout_margin="10dp"
                                         android:text="最新资讯"
-                                        android:textSize="18sp"
-                                        android:textColor="@color/app_White"/>
+                                        android:textColor="@color/app_White"
+                                        android:textSize="18sp" />
+
                                     <View
                                         android:layout_width="370dp"
                                         android:layout_height="1dp"
-                                        android:background="@color/app_Gray"
-                                        android:layout_gravity="center_horizontal"/>
+                                        android:layout_gravity="center_horizontal"
+                                        android:background="@color/app_Gray" />
+
                                     <com.muppet.weather.View.ListViewForScrollView
                                         android:id="@+id/lv_news"
                                         android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"/>
+                                        android:layout_height="wrap_content" />
+
                                     <View
                                         android:layout_width="300dp"
                                         android:layout_height="1dp"
-                                        android:background="@color/app_Gray"
-                                        android:layout_gravity="center_horizontal"/>
+                                        android:layout_gravity="center_horizontal"
+                                        android:background="@color/app_Gray" />
+
                                     <TextView
                                         android:id="@+id/tv_footView"
                                         android:layout_width="wrap_content"
@@ -519,36 +533,13 @@
                                         android:layout_gravity="center_horizontal"
                                         android:layout_margin="10dp"
                                         android:text="查看更多"
-                                        android:textSize="18sp"
-                                        android:textColor="@color/app_White"/>
+                                        android:textColor="@color/app_White"
+                                        android:textSize="18sp" />
                                 </LinearLayout>
                             </LinearLayout>
                         </FrameLayout>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="今天天气"
-                            android:textColor="@color/app_White"
-                            android:textSize="30sp" />
-
-                        <Button
-                            android:id="@+id/btn_changeImg"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="更换壁纸" />
-
-                        <Button
-                            android:id="@+id/btn_category"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="选择类别" />
-
                     </LinearLayout>
                 </ScrollView>
-
-
             </FrameLayout>
         </FrameLayout>
     </LinearLayout>
@@ -559,10 +550,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="@color/app_White"
-        app:menu="@menu/navigation_menu"
-        app:itemTextColor="@color/app_Dark"/>
-
-
+        app:itemTextColor="@color/app_Dark"
+        app:menu="@menu/navigation_menu" />
 
 
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -3,12 +3,10 @@ package com.muppet.weather.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.ScrollView;
@@ -60,10 +58,6 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.iv_bg)
     ImageView ivBg;
-    @BindView(R.id.btn_changeImg)
-    Button btnChangeImg;
-    @BindView(R.id.btn_category)
-    Button btnCategory;
     @BindView(R.id.city)
     TextView city;
     @BindView(R.id.manage)
@@ -112,6 +106,8 @@ public class MainActivity extends AppCompatActivity {
     ListViewForScrollView lvNews;
     @BindView(R.id.sv)
     ScrollView sv;
+    @BindView(R.id.iv_personal)
+    ImageView ivPersonal;
 
     private String TAG = "123";
     //第几张图片
@@ -153,9 +149,9 @@ public class MainActivity extends AppCompatActivity {
         TextView my_nickname = headerLayout.findViewById(R.id.my_nickname);
         ImageView my_icon = headerLayout.findViewById(R.id.my_icon);
         //判断登录没
-        sharedPreferences = getSharedPreferences("user_info",MODE_PRIVATE);
-        String userID = sharedPreferences.getString("userID",null);
-        if (userID != null){
+        sharedPreferences = getSharedPreferences("user_info", MODE_PRIVATE);
+        String userID = sharedPreferences.getString("userID", null);
+        if (userID != null) {
             //隐藏视图
             menuItem = navigationView.getMenu().findItem(R.id.nav_outlogin);
             menuItem.setVisible(false);
@@ -166,12 +162,12 @@ public class MainActivity extends AppCompatActivity {
             headerLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(MainActivity.this,ActLogin.class));
+                    startActivity(new Intent(MainActivity.this, ActLogin.class));
                     drawerLayout.closeDrawer(Gravity.LEFT);
                     finish();
                 }
             });
-        }else {
+        } else {
             String nickname = sharedPreferences.getString("nickname", null);
             String myIcon = sharedPreferences.getString("myIcon", null);
             my_nickname.setText("你好啊");
@@ -179,23 +175,23 @@ public class MainActivity extends AppCompatActivity {
             headerLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(MainActivity.this,ModifyMyInfoActivity.class));
+                    startActivity(new Intent(MainActivity.this, ModifyMyInfoActivity.class));
                     drawerLayout.closeDrawer(Gravity.LEFT);
                     finish();
                 }
             });
         }
         String goback = getIntent().getStringExtra("goback");
-        if (goback != null){
+        if (goback != null) {
             drawerLayout.openDrawer(Gravity.LEFT);
         }
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.nav_commoncity:
-                        Intent intent = new Intent(MainActivity.this,CommonCityActivity.class);
+                        Intent intent = new Intent(MainActivity.this, CommonCityActivity.class);
                         startActivity(intent);
                         break;
                     case R.id.nav_outlogin:
@@ -238,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
     private void initView() {
         newsLIstAdapter = new NewsLIstAdapter(this);
         lvNews.setAdapter(newsLIstAdapter);
-        sv.smoothScrollTo(0,0);//调整scrollview位置
+        sv.smoothScrollTo(0, 0);//调整scrollview位置
         getBgImg();
         getWeather();
         getNewsList();
@@ -579,18 +575,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @OnClick({R.id.btn_changeImg, R.id.btn_category, R.id.tv_footView,R.id.manage})
+    @OnClick({R.id.tv_footView, R.id.manage, R.id.iv_personal})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btn_changeImg:
-                changeImg += 1;
-                getBgImg();
-                break;
-            case R.id.btn_category:
-                if (categoryDialog == null) {
-                    categoryDialog = new CategoryDialog(this);
-                }
-                categoryDialog.show();
+            case R.id.iv_personal:
+                //瓜皮 点击事件再这///////////////////////////////////
                 break;
             case R.id.tv_footView:
                 if (newsLIstAdapter.getCount() == 3) {
@@ -605,7 +594,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.manage:
                 View popupView = this.getLayoutInflater().inflate(R.layout.popupwindow_option, null);
-                final PopupWindow window = new PopupWindow(popupView,450,400);
+                final PopupWindow window = new PopupWindow(popupView, 450, 400);
                 TextView tvSaveImg = popupView.findViewById(R.id.tv_saveImg);
                 TextView tvChangeImg = popupView.findViewById(R.id.tv_changeImg);
                 TextView tvCategory = popupView.findViewById(R.id.tv_category);
@@ -637,7 +626,7 @@ public class MainActivity extends AppCompatActivity {
                 });
                 window.setFocusable(true);
                 window.update();
-                window.showAsDropDown(manage,0,0);
+                window.showAsDropDown(manage, 0, 0);
                 break;
         }
     }
