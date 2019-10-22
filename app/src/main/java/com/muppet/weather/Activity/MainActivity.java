@@ -141,8 +141,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initMyActvity() {
-        Intent intent = getIntent();
-        String username = intent.getStringExtra("username");
         navigationView = findViewById(R.id.navigation);
         drawerLayout = findViewById(R.id.drawer_layout);
         View headerLayout = navigationView.inflateHeaderView(R.layout.drawer_layout_left_head);
@@ -181,6 +179,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+        ivPersonal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.openDrawer(Gravity.LEFT);
+            }
+        });
         String goback = getIntent().getStringExtra("goback");
         if (goback != null) {
             drawerLayout.openDrawer(Gravity.LEFT);
@@ -203,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
-        DrawerLayout.DrawerListener drawerListener = new DrawerLayout.DrawerListener() {
+        /*DrawerLayout.DrawerListener drawerListener = new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 // 得到contentView 实现侧滑界面出现后主界面向右平移避免侧滑界面遮住主界面
@@ -229,6 +233,7 @@ public class MainActivity extends AppCompatActivity {
         };
         drawerLayout.addDrawerListener(drawerListener);
         //drawerLayout.setScrimColor(Color.TRANSPARENT);//去除侧滑时的阴影
+    }*/
     }
 
     private void initView() {
@@ -575,12 +580,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @OnClick({R.id.tv_footView, R.id.manage, R.id.iv_personal})
+    @OnClick({R.id.tv_footView, R.id.manage})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.iv_personal:
-                //瓜皮 点击事件再这///////////////////////////////////
-                break;
             case R.id.tv_footView:
                 if (newsLIstAdapter.getCount() == 3) {
                     newsLIstAdapter.addItemNum(mNewsData.size());

@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:background="@color/app_primary"
     android:gravity="center"
-    android:layout_gravity="left"
     android:layout_height="180dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
