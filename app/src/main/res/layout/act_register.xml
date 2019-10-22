@@ -4,19 +4,53 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#A0C5C5"
-    android:gravity="center"
+    android:background="@color/app_White"
     tools:context=".Activity.ActRegister">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/app_primary">
+
+        <TextView
+            android:id="@+id/city"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="注册"
+            android:textColor="@color/app_White"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/lv_back"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
+            android:src="@mipmap/back" />
+    </RelativeLayout>
    <LinearLayout
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
+       android:layout_marginTop="30dp"
+       android:layout_marginStart="10dp"
+       android:layout_marginEnd="10dp"
+       android:layout_marginBottom="10dp"
+       android:background="@drawable/border_green"
        android:orientation="horizontal">
 
        <ImageView
-           android:layout_width="65dp"
-           android:layout_height="40dp"
-           android:src="@mipmap/mobile"
-           android:paddingLeft="25dp"></ImageView>
+           android:layout_width="30dp"
+           android:layout_height="45dp"
+           android:layout_marginStart="10dp"
+           android:src="@mipmap/mobile" />
+       <View
+           android:id="@+id/v_line"
+           android:layout_width="1dp"
+           android:layout_height="match_parent"
+           android:layout_margin="8dp"
+           android:background="@color/app_Gray" />
        <EditText
            android:id="@+id/phone_register"
            android:layout_width="match_parent"
@@ -24,42 +58,52 @@
            android:inputType="phone"
            android:maxLength="11"
            android:hint="请输入手机号"
+           android:textColorHint="@color/app_Gray"
            android:background="@null"
            android:textSize="20sp"
-           android:layout_gravity="center">
-       </EditText>
+           android:layout_gravity="center"/>
    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:orientation="horizontal"
+        android:background="@drawable/border_green"
         android:layout_marginTop="15dp">
 
         <ImageView
-            android:layout_width="65dp"
-            android:layout_height="40dp"
-            android:src="@mipmap/paswd"
-            android:paddingLeft="25dp"></ImageView>
+            android:layout_width="30dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="10dp"
+            android:src="@mipmap/paswd" />
 
+        <View
+            android:id="@+id/v_line2"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:background="@color/app_Gray" />
         <EditText
             android:id="@+id/pswd_register"
-            android:layout_width="260dp"
+            android:layout_width="240dp"
             android:layout_height="wrap_content"
+            android:textColorHint="@color/app_Gray"
             android:layout_gravity="center"
             android:background="@null"
             android:hint="请输入密码"
             android:inputType="textPassword"
-            android:textSize="20sp"></EditText>
+            android:textSize="20sp"/>
         <Button
             android:id="@+id/showpswd_register"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
             android:text="显示密码"
-            android:textColor="#2196F3"
-            android:textSize="18dp"
-            android:background="@null"
-            >
-        </Button>
+            android:textColor="@color/app_blue"
+            android:textSize="18sp"
+            style="?android:attr/borderlessButtonStyle"
+            android:background="@color/app_White" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -68,10 +112,9 @@
         android:layout_marginTop="15dp"
         android:gravity="center">
         <ImageView
-            android:layout_width="65dp"
-            android:layout_height="40dp"
-            android:src="@mipmap/code"
-            android:paddingLeft="25dp">
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@mipmap/code">
         </ImageView>
 <!--        <EditText-->
 <!--            android:id="@+id/code_register"-->
@@ -87,9 +130,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="手机号认证"
-            android:textColor="#2196F3"
+            android:textColor="@color/app_blue"
             android:textSize="18dp"
-            android:background="@null">
+            style="?android:attr/borderlessButtonStyle"
+            android:background="@color/app_White">
         </Button>
     </LinearLayout>
     <LinearLayout
@@ -101,11 +145,11 @@
             android:layout_width="350sp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="60sp"
+            android:layout_marginTop="30sp"
             android:background="@drawable/button_shape"
             android:text="注册"
             android:textColor="#FFFFFF"
-            android:textSize="25sp"></Button>
+            android:textSize="25sp"/>
 
         <TextView
             android:id="@+id/userread_register"
@@ -115,6 +159,7 @@
             android:gravity="center"
             android:text="登录即同意《用户协议》和《隐私政策》"
             android:textColorHighlight="#00ffffff"
-            android:textSize="15sp"></TextView>
+            android:textColor="@color/app_Dark"
+            android:textSize="15sp"/>
     </LinearLayout>
 </LinearLayout>

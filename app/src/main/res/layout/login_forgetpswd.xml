@@ -3,51 +3,98 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:background="#A0C5C5">
+    android:background="@color/app_White">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/app_primary">
+
+        <TextView
+            android:id="@+id/city"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="登录"
+            android:textColor="@color/app_White"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/lv_back"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
+            android:src="@mipmap/back" />
+    </RelativeLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/border_green"
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="64dp"
-            android:layout_height="51dp"
+            android:layout_width="30dp"
+            android:layout_height="45dp"
             android:src="@mipmap/user"
-            android:layout_marginLeft="50dp">
-        </ImageView>
+            android:layout_marginStart="10dp"/>
 
+        <View
+            android:id="@+id/v_line"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:background="@color/app_Gray" />
         <EditText
             android:id="@+id/userid"
             android:layout_width="match_parent"
             android:layout_height="38dp"
             android:layout_gravity="center"
+            android:inputType="phone"
+            android:maxLength="11"
             android:background="@null"
-            android:textSize="25dp"
+            android:textSize="20sp"
+            android:hint="............"
+            android:textColorHint="@color/app_Gray"
             android:focusableInTouchMode="false">
         </EditText>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:orientation="horizontal"
-        android:layout_marginTop="15dp">
+        android:background="@drawable/border_green">
 
         <ImageView
-            android:layout_width="64dp"
-            android:layout_height="51dp"
+            android:layout_width="30dp"
+            android:layout_height="45dp"
             android:src="@mipmap/paswd"
-            android:layout_marginLeft="50dp">
-        </ImageView>
+            android:layout_marginStart="10dp"/>
 
+        <View
+            android:id="@+id/v_line2"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:background="@color/app_Gray" />
         <EditText
             android:id="@+id/pswd_new"
             android:layout_width="match_parent"
             android:layout_height="38dp"
             android:layout_gravity="center"
             android:background="@null"
-            android:textSize="25dp"
+            android:textSize="20sp"
             android:hint="请输入新密码"
+            android:textColorHint="@color/app_Gray"
             android:focusable="true"
             android:inputType="textVisiblePassword">
         </EditText>
