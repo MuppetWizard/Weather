@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/icon"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".Activity.ModifyMyInfoActivity"></activity>
+        <activity android:name=".Activity.ClipImageActivity"></activity>
+        <activity android:name=".Activity.ModifyMyInfoActivity" />
         <activity android:name=".Activity.CommonCityActivity" />
         <activity android:name=".Activity.Forgetpswd" />
         <activity android:name=".Activity.ActLogin" />
@@ -27,6 +28,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.muppet.weather.fileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>

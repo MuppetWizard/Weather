@@ -50,12 +50,12 @@
             android:textColor="#000"
             android:textSize="20sp" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <com.muppet.weather.View.CircleImageView
             android:id="@+id/show_faces"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_toLeftOf="@+id/my_head_right"
             android:layout_marginRight="20dp"
-            android:layout_toLeftOf="@+id/my_head_right" />
+            android:layout_width="60dp"
+            android:layout_height="60dp" />
 
         <ImageView
             android:id="@+id/my_head_right"
