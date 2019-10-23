@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/icon"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".Activity.ModifyMyInfoActivity"></activity>
+        <activity android:name=".Activity.ActCitySelection"></activity>
+        <activity android:name=".Activity.ModifyMyInfoActivity" />
         <activity android:name=".Activity.CommonCityActivity" />
         <activity android:name=".Activity.Forgetpswd" />
         <activity android:name=".Activity.ActLogin" />
