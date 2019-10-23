@@ -6,10 +6,9 @@
     android:gravity="center"
     android:layout_height="180dp">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_marginTop="20dp"
+        <com.muppet.weather.View.CircleImageView
             android:id="@+id/my_icon"
-            android:layout_centerInParent="true"
+            android:layout_marginTop="20dp"
             android:layout_width="80dp"
             android:layout_height="80dp" />
 

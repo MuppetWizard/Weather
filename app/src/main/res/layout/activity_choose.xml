@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#f5f5f4">
+
+
+        <LinearLayout
+            android:background="@color/app_White"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:layout_height="80dp">
+            <LinearLayout
+                android:layout_width="50dp"
+                android:gravity="center_vertical"
+                android:layout_height="50dp">
+                <ImageView
+                    android:id="@+id/go_myactivity"
+                    android:layout_width="30dp"
+                    android:backgroundTint="#6f6f6f"
+                    android:layout_marginLeft="10dp"
+                    android:background="@mipmap/back"
+                    android:layout_height="30dp" />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:text="个人信息"
+                android:layout_width="match_parent"
+                android:textSize="22sp"
+                android:textColor="@color/app_Dark"
+                android:paddingRight="30dp"
+                android:gravity="center"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:id="@+id/chang_icon"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:layout_height="120dp">
+
+            <TextView
+                android:text="头像"
+                android:layout_marginLeft="20dp"
+                android:textColor="@color/smssdk_black"
+                android:textSize="18sp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+
+            <com.muppet.weather.View.CircleImageView
+                android:id="@+id/head_image"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@mipmap/not_logged"
+                android:layout_marginLeft="50dp" />
+
+            <ImageView
+                android:background="@mipmap/right_my"
+                android:backgroundTint="#c6c6c6"
+                android:layout_marginRight="20dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
+
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:background="#f5f5f4"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_height="1dp"/>
+
+
+        <LinearLayout
+            android:id="@+id/chang_nickname"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:layout_height="50dp">
+            <TextView
+                android:text="昵称"
+                android:layout_marginLeft="20dp"
+                android:textColor="@color/app_Dark"
+                android:textSize="18sp"
+                android:textStyle="normal"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/my_info_nickname"
+                android:textSize="16sp"
+                android:textColor="#BEBDBD"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:background="@mipmap/right_my"
+                android:backgroundTint="#c6c6c6"
+                android:layout_marginRight="20dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:background="#f5f5f4"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_height="1dp"/>
+
+        <LinearLayout
+            android:id="@+id/chang_sex"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:layout_height="50dp">
+            <TextView
+                android:text="性别"
+                android:layout_marginLeft="20dp"
+                android:textSize="18sp"
+                android:layout_width="0dp"
+                android:textColor="@color/app_Dark"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/my_info_sex"
+                android:textSize="16sp"
+                android:textColor="#BEBDBD"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:background="@mipmap/right_my"
+                android:backgroundTint="#c6c6c6"
+                android:layout_marginRight="20dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:background="#f5f5f4"
+
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_height="1dp"/>
+
+        <LinearLayout
+            android:id="@+id/chang_autograph"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:layout_height="50dp">
+
+            <TextView
+                android:text="签名"
+                android:layout_marginLeft="20dp"
+                android:textSize="18sp"
+                android:layout_width="0dp"
+                android:textColor="@color/app_Dark"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/my_info_auto"
+                android:textSize="16sp"
+                android:textColor="#BEBDBD"
+                android:gravity="right"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:background="@mipmap/right_my"
+                android:backgroundTint="#c6c6c6"
+                android:layout_marginRight="20dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
+        </LinearLayout>
+
+</LinearLayout>
