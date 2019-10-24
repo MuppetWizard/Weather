@@ -3,39 +3,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#f5f5f4">
+    android:background="@color/app_White">
 
 
-        <LinearLayout
-            android:background="@color/app_White"
-            android:layout_width="match_parent"
-            android:gravity="center_vertical"
-            android:layout_height="80dp">
-            <LinearLayout
-                android:layout_width="50dp"
-                android:gravity="center_vertical"
-                android:layout_height="50dp">
-                <ImageView
-                    android:id="@+id/go_myactivity"
-                    android:layout_width="30dp"
-                    android:backgroundTint="#6f6f6f"
-                    android:layout_marginLeft="10dp"
-                    android:background="@mipmap/back"
-                    android:layout_height="30dp" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/app_primary">
 
-            </LinearLayout>
+        <TextView
+            android:id="@+id/city"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="个人信息"
+            android:textColor="@color/app_White"
+            android:textSize="20sp" />
 
-
-            <TextView
-                android:text="个人信息"
-                android:layout_width="match_parent"
-                android:textSize="22sp"
-                android:textColor="@color/app_Dark"
-                android:paddingRight="30dp"
-                android:gravity="center"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
+        <ImageView
+            android:id="@+id/go_myactivity"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
+            android:src="@mipmap/back" />
+    </RelativeLayout>
 
         <LinearLayout
             android:layout_marginTop="20dp"

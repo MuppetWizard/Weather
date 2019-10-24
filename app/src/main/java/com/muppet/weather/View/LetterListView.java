@@ -24,14 +24,17 @@ public class LetterListView extends View {
 
     public LetterListView(Context context) {
         super(context);
+        this.mContext = context;
     }
 
     public LetterListView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        this.mContext = context;
     }
 
     public LetterListView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        this.mContext = context;
     }
 
     @Override
@@ -103,6 +106,5 @@ public class LetterListView extends View {
     public interface OnTouchingLetterChangedListener {
         void onTouchingLetterChanged(String s);
     }
-
 
 }

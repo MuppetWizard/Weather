@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,6 +32,8 @@ public class CommonCityActivity extends AppCompatActivity {
     TextView city;
     @BindView(R.id.lv_back)
     ImageView lvBack;
+    @BindView(R.id.tv_addCity)
+    TextView tvAddCity;
     private SwipeToDismissWrapper mSwipeToDismissWrapper;
     private List<String> mDataList = new ArrayList<>();
 
@@ -83,15 +84,16 @@ public class CommonCityActivity extends AppCompatActivity {
         }
     }
 
-    @OnClick(R.id.lv_back)
-    public void onViewClicked(View view) {
+
+    @OnClick({R.id.lv_back, R.id.tv_addCity})
+    public void onClick(View view) {
         switch (view.getId()) {
             case R.id.lv_back:
-                Intent intent = new Intent();
-                intent.putExtra("goback", "返回");
-                intent.setClass(this, MainActivity.class);
-                startActivity(intent);
                 finish();
+                break;
+            case R.id.tv_addCity:
+                Intent intent = new Intent(this, ActCitySelection.class);
+                startActivity(intent);
                 break;
         }
     }

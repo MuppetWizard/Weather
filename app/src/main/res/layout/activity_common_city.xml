@@ -37,8 +37,21 @@
         android:layout_marginTop="5dp"
         android:id="@+id/recycler_common_city"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
     </androidx.recyclerview.widget.RecyclerView>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/tv_addCity"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:text="添加城市"
+            android:textSize="18sp"
+            android:textColor="@color/app_Dark"/>
+    </RelativeLayout>
 
 </LinearLayout>
