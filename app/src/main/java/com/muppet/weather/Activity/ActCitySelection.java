@@ -30,12 +30,14 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.muppet.weather.Model.BusCityWrap;
 import com.muppet.weather.Model.CityEntity;
 import com.muppet.weather.R;
 import com.muppet.weather.Utils.JsonReadUtil;
 import com.muppet.weather.Utils.ToastUtil;
 import com.muppet.weather.View.LetterListView;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -102,8 +104,8 @@ public class ActCitySelection extends AppCompatActivity implements AbsListView.O
         overlayThread = new OverlayThread();
         searchCityListAdapter = new SearchCityListAdapter(this, searchCityList);
         searchCityLv.setAdapter(searchCityListAdapter);
-        locationCity = "成都";
-        curSelCity = locationCity;
+     //   locationCity = "成都";
+       // curSelCity = locationCity;
 
     }
 
@@ -585,9 +587,11 @@ public class ActCitySelection extends AppCompatActivity implements AbsListView.O
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() { //设置确定按钮
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //传递城市，准备使用eventBus
+
+                BusCityWrap cityWrap = new BusCityWrap(curCity);
+                EventBus.getDefault().post(cityWrap);
                 dialog.dismiss();
-                //选中之后做你的方法
+
 
             }
         });

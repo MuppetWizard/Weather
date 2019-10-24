@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.navigation.NavigationView;
 import com.muppet.weather.Adapter.NewsLIstAdapter;
 import com.muppet.weather.IpAddress;
+import com.muppet.weather.Model.BusCityWrap;
 import com.muppet.weather.Model.NewsList;
 import com.muppet.weather.Model.NormalImg;
 import com.muppet.weather.Model.Weather;
@@ -31,6 +33,9 @@ import com.muppet.weather.Utils.Utils;
 import com.muppet.weather.View.CategoryDialog;
 import com.muppet.weather.View.ListViewForScrollView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
@@ -136,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         initMyActvity();
         //初始化
         initView();
@@ -501,6 +507,11 @@ public class MainActivity extends AppCompatActivity {
         futureChart.setCurrentViewport(v);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void OnReceivMsg(BusCityWrap city) {
+        this.mCity = city.getCity();
+        getWeather();
+    }
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^天气数据显示^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     /**
@@ -524,8 +535,9 @@ public class MainActivity extends AppCompatActivity {
                     List<NormalImg.ResBean.VerticalBean> list = result.getRes().getVertical();
 
                     Glide.with(MainActivity.this).load(list.get(0).getImg())
-                            .error(getResources().getDrawable(R.mipmap.ic_launcher))
+                            .error(getResources().getDrawable(R.mipmap.bgimg))
                             .into(ivBg);
+                    Log.e(TAG, "onSuccess: "+list.get(0).getImg() );
                     ToastUtil.showMessage("成功");
                 }
             }
@@ -611,4 +623,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 }
