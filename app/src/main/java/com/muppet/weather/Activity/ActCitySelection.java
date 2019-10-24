@@ -2,6 +2,7 @@ package com.muppet.weather.Activity;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.os.Handler;
@@ -584,6 +585,7 @@ public class ActCitySelection extends AppCompatActivity implements AbsListView.O
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() { //设置确定按钮
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                //传递城市，准备使用eventBus
                 dialog.dismiss();
                 //选中之后做你的方法
 
