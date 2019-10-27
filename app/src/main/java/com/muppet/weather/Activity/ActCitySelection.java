@@ -4,12 +4,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +36,7 @@ import com.muppet.weather.Model.BusCityWrap;
 import com.muppet.weather.Model.CityEntity;
 import com.muppet.weather.R;
 import com.muppet.weather.Utils.JsonReadUtil;
+import com.muppet.weather.Utils.LocationUtils;
 import com.muppet.weather.Utils.ToastUtil;
 import com.muppet.weather.View.LetterListView;
 
@@ -167,6 +170,43 @@ public class ActCitySelection extends AppCompatActivity implements AbsListView.O
                 return false;
             }
         });
+    }
+
+    //定位
+    private void getLocation() {
+        LocationUtils.register(this, 0, 0, new LocationUtils.OnLocationChangeListener() {
+            @Override
+            public void getLastKnownLocation(Location location) {
+                Log.e("123", "onLocationChanged: " + location.getLatitude());
+            }
+
+            @Override
+            public void onLocationChanged(Location location) {
+                //位置信息变化时触发
+                Log.e("123", "定位方式：" + location.getProvider());
+                Log.e("123", "纬度：" + location.getLatitude());
+                Log.e("123", "经度：" + location.getLongitude());
+                Log.e("123", "海拔：" + location.getAltitude());
+                Log.e("123", "时间：" + location.getTime());
+                Log.e("123", "国家：" + LocationUtils.getCountryName(ActCitySelection.this, location.getLatitude(), location.getLongitude()));
+                Log.e("123", "获取地理位置：" + LocationUtils.getAddress(ActCitySelection.this, location.getLatitude(), location.getLongitude()));
+                Log.e("123", "所在地：" + LocationUtils.getLocality(ActCitySelection.this, location.getLatitude(), location.getLongitude()));
+                Log.e("123", "所在街道：" + LocationUtils.getStreet(ActCitySelection.this, location.getLatitude(), location.getLongitude()));
+
+
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocationUtils.unregister();
     }
 
     /**
@@ -377,7 +417,7 @@ public class ActCitySelection extends AppCompatActivity implements AbsListView.O
                         @Override
                         public void onClick(View v) {
                             //获取定位
-
+                            getLocation();
                         }
                     });
                 } else {
@@ -590,8 +630,8 @@ public class ActCitySelection extends AppCompatActivity implements AbsListView.O
 
                 BusCityWrap cityWrap = new BusCityWrap(curCity);
                 EventBus.getDefault().post(cityWrap);
+                startActivity(new Intent(ActCitySelection.this,MainActivity.class));
                 dialog.dismiss();
-
 
             }
         });
