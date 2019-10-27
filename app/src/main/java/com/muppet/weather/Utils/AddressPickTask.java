@@ -2,6 +2,7 @@ package com.muppet.weather.Utils;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.graphics.Color;
 import android.os.AsyncTask;
 
 import com.alibaba.fastjson.JSON;
@@ -81,6 +82,12 @@ public class AddressPickTask extends AsyncTask<String, Void, ArrayList<Province>
             picker.setCanLoop(true);
             picker.setHideProvince(hideProvince);
             picker.setHideCounty(hideCounty);
+            picker.setCancelText("取消");
+            picker.setSubmitTextColor(Color.BLACK);
+            picker.setCancelTextSize(18);
+            picker.setSubmitText("确定");
+            picker.setSubmitTextSize(18);
+            picker.setSubmitTextColor(Color.BLACK);
             picker.setWheelModeEnable(true);
             if (hideCounty) {
                 picker.setColumnWeight(1 / 3.0f, 2 / 3.0f);//将屏幕分为3份，省级和地级的比例为1:2

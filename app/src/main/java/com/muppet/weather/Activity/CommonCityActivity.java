@@ -49,6 +49,7 @@ public class CommonCityActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private List<String> mDataList;
     private CommonAdapter commonAdapter;
+    private String phone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,8 @@ public class CommonCityActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         recyclerCommonCity = findViewById(R.id.recycler_common_city);
         recyclerCommonCity.setLayoutManager(new LinearLayoutManager(this));
+        sharedPreferences = getSharedPreferences("user_login",MODE_PRIVATE);
+        phone = sharedPreferences.getString("phone", null);
         getData();
         commonAdapter = new CommonAdapter(mDataList);
         mSwipeToDismissWrapper = new SwipeToDismissWrapper(commonAdapter, mDataList);
@@ -72,6 +75,30 @@ public class CommonCityActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 mDataList.remove(position);
+
+                                RequestParams params = new RequestParams(IpAddress.getUrl(IpAddress.DELETECITY));
+                                params.addParameter("user_name", phone);
+                                params.addBodyParameter("city",mDataList.get(position));
+                                x.http().post(params, new Callback.CommonCallback<String>() {
+                                    @Override
+                                    public void onSuccess(String result) {
+
+                                    }
+                                    @Override
+                                    public void onError(Throwable ex, boolean isOnCallback) {
+                                        Toast.makeText(CommonCityActivity.this, "网络请求错误", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    @Override
+                                    public void onCancelled(CancelledException cex) {
+
+                                    }
+
+                                    @Override
+                                    public void onFinished() {
+
+                                    }
+                                });
                                 mSwipeToDismissWrapper.notifyDataSetChanged();
                                 dialog.dismiss();
                             }
@@ -90,8 +117,6 @@ public class CommonCityActivity extends AppCompatActivity {
 
     private void getData() {
         mDataList = new ArrayList<>();
-        sharedPreferences = getSharedPreferences("user_login",MODE_PRIVATE);
-        String phone = sharedPreferences.getString("phone", null);
         RequestParams params = new RequestParams(IpAddress.getUrl(IpAddress.GETALLCITY));
         params.addParameter("user_name", phone);
         x.http().post(params, new Callback.CommonCallback<String>() {

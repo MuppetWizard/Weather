@@ -94,7 +94,7 @@
             android:layout_marginRight="20dp"
             android:layout_toLeftOf="@+id/my_nickname_right"
             android:gravity="center_vertical"
-            android:text="你好啊"
+            android:textColor="@color/app_Dark"
             android:textSize="20sp" />
 
         <ImageView

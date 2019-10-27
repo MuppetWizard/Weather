@@ -30,9 +30,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.aigestudio.wheelpicker.model.Province;
+import com.bumptech.glide.Glide;
+import com.hb.dialog.myDialog.MyAlertInputDialog;
 import com.muppet.weather.BuildConfig;
 import com.muppet.weather.IpAddress;
+import com.muppet.weather.Model.UserInfo;
 import com.muppet.weather.R;
 import com.muppet.weather.Utils.AddressPickTask;
 import com.muppet.weather.Utils.FileUtil;
@@ -46,6 +48,9 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 import butterknife.BindView;
@@ -53,6 +58,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.addapp.pickers.entity.City;
 import cn.addapp.pickers.entity.County;
+import cn.addapp.pickers.entity.Province;
 import cn.addapp.pickers.listeners.OnItemPickListener;
 import cn.addapp.pickers.listeners.OnSingleWheelListener;
 import cn.addapp.pickers.picker.SinglePicker;
@@ -74,8 +80,7 @@ public class ModifyMyInfoActivity extends AppCompatActivity implements View.OnCl
     //调用照相机返回图片文件
     private File tempFile;
     private int type;
-
-    private String[] sexSelection = new String[]{"男","女"};
+    private UserInfo userInfo;
 
     @BindView(R.id.go_back)
     ImageView goBack;
@@ -102,6 +107,15 @@ public class ModifyMyInfoActivity extends AppCompatActivity implements View.OnCl
         setContentView(R.layout.activity_modify_my_info);
         ButterKnife.bind(this);
         rlModifyIcon.setOnClickListener(this);
+        initData();
+    }
+
+    private void initData() {
+        userInfo = new UserInfo();
+        showNickname.setText(userInfo.getName());
+        showBirthday.setText(userInfo.getAddr());
+        Glide.with(this).load(userInfo.getFile()).into(showFaces);
+        showSex.setText(userInfo.getAge());
     }
 
     public void onClick(View v) {
@@ -249,10 +263,10 @@ public class ModifyMyInfoActivity extends AppCompatActivity implements View.OnCl
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    SharedPreferences sharedPreferences = getSharedPreferences("user_login",MODE_PRIVATE);
+                    SharedPreferences sharedPreferences = getSharedPreferences("user_login", MODE_PRIVATE);
                     String phone = sharedPreferences.getString("phone", null);
                     RequestParams params = new RequestParams(IpAddress.getUrl(IpAddress.UPDATEUSERICON));
-                    params.addBodyParameter("user_name",phone);
+                    params.addBodyParameter("user_name", phone);
                     params.addBodyParameter("upload", file);
                     params.setMultipart(true);
                     x.http().post(params, new Callback.CommonCallback<String>() {
@@ -318,23 +332,49 @@ public class ModifyMyInfoActivity extends AppCompatActivity implements View.OnCl
                 finish();
                 break;
             case R.id.rl_modify_nickname:
-                startActivity(new Intent(this,ModifyNicknameActivity.class));
-                finish();
+                modifyNickName(showNickname);
                 break;
             case R.id.rl_modify_sex:
                 //修改
                 onOptionPicker(showSex);
                 break;
             case R.id.rl_modify_birthday:
-                //onAddressPicker(showBirthday);
                 onAddressPicker(showBirthday);
+                //onAddressPicker(showBirthday);.3
                 break;
         }
     }
 
-    private String[] sexArry = new String[]{"女", "男"};
+    private List<Province> provinces = new ArrayList<>();
+
+    private void modifyNickName(TextView showNickname) {
+        final MyAlertInputDialog myAlertInputDialog = new MyAlertInputDialog(this).builder()
+                .setTitle("请输入")
+                .setEditText("");
+        myAlertInputDialog.setPositiveButton("确认", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showNickname.setText(myAlertInputDialog.getResult());
+                //Toast.makeText(ModifyMyInfoActivity.this, myAlertInputDialog.getResult(), Toast.LENGTH_SHORT).show();
+                myAlertInputDialog.dismiss();
+            }
+        }).setNegativeButton("取消", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myAlertInputDialog.dismiss();
+            }
+        });
+        myAlertInputDialog.show();
+    }
+
     public void onOptionPicker(TextView showSex) {
-        SinglePicker<String> picker = new SinglePicker<>(this, sexArry);
+        ArrayList<String> list = new ArrayList<>();
+        for (int i = 16; i < 90; i++) {
+            String s = "";
+            s = i + "";
+            list.add(s);
+        }
+        SinglePicker<String> picker = new SinglePicker<>(this, list);
         picker.setCanLoop(false);//不禁用循环
         picker.setLineVisible(true);
         picker.setTextSize(19);
@@ -345,6 +385,7 @@ public class ModifyMyInfoActivity extends AppCompatActivity implements View.OnCl
         picker.setSelectedIndex(8);
         picker.setWheelModeEnable(false);
         //启用权重 setWeightWidth 才起作用
+        picker.setLabel("岁");
         picker.setWeightEnable(true);
         picker.setWeightWidth(1);
         picker.setSelectedTextColor(Color.BLACK);//前四位值是透明度
@@ -379,11 +420,12 @@ public class ModifyMyInfoActivity extends AppCompatActivity implements View.OnCl
                 if (county == null) {
                     showToast(province.getAreaName() + city.getAreaName());
                 } else {
+                    showBirthday.setText(province.getAreaName() + city.getAreaName() + county.getAreaName());
                     showToast(province.getAreaName() + city.getAreaName() + county.getAreaName());
                 }
             }
         });
-        task.execute("贵州", "毕节", "纳雍");
+        task.execute("四川", "绵阳", "安县");
     }
 
     private void showToast(String msg) {
