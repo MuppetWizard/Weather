@@ -130,13 +130,11 @@
         <TextView
             android:id="@+id/show_sex"
             android:layout_width="wrap_content"
+            android:gravity="center_vertical"
             android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="0dp"
             android:layout_marginRight="20dp"
             android:layout_toLeftOf="@+id/my_sex_right"
-            android:gravity="center_vertical"
-            android:text="男"
+            android:textColor="#000"
             android:textSize="20sp" />
 
         <ImageView
@@ -165,7 +163,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="生日"
+            android:text="地址"
             android:textColor="#000"
             android:textSize="20sp" />
 
@@ -176,7 +174,7 @@
             android:layout_marginRight="20dp"
             android:layout_toLeftOf="@+id/my_birthday_right"
             android:gravity="center_vertical"
-            android:text="1998-05-02"
+            android:textColor="#000"
             android:textSize="20sp" />
 
         <ImageView

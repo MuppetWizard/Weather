@@ -15,4 +15,5 @@
     <color name="app_Gray_more">#777777</color>
     <color name="app_transparent_black">#33000000</color>
     <color name="app_transparent_white">#809C9C9C</color>
+    <color name="blue">#28A3B3</color>
 </resources>
