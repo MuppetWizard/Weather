@@ -8,6 +8,7 @@ import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -31,6 +32,7 @@ import android.widget.Toast;
 
 import com.aigestudio.wheelpicker.model.Province;
 import com.muppet.weather.BuildConfig;
+import com.muppet.weather.IpAddress;
 import com.muppet.weather.R;
 import com.muppet.weather.Utils.AddressPickTask;
 import com.muppet.weather.Utils.FileUtil;
@@ -247,7 +249,10 @@ public class ModifyMyInfoActivity extends AppCompatActivity implements View.OnCl
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    RequestParams params = new RequestParams("http://192.168.42.39:8080/EndProject/user_Rs");
+                    SharedPreferences sharedPreferences = getSharedPreferences("user_login",MODE_PRIVATE);
+                    String phone = sharedPreferences.getString("phone", null);
+                    RequestParams params = new RequestParams(IpAddress.getUrl(IpAddress.UPDATEUSERICON));
+                    params.addBodyParameter("user_name",phone);
                     params.addBodyParameter("upload", file);
                     params.setMultipart(true);
                     x.http().post(params, new Callback.CommonCallback<String>() {
@@ -322,12 +327,12 @@ public class ModifyMyInfoActivity extends AppCompatActivity implements View.OnCl
                 break;
             case R.id.rl_modify_birthday:
                 //onAddressPicker(showBirthday);
-                onAddress3Picker(showBirthday);
+                onAddressPicker(showBirthday);
                 break;
         }
     }
 
-    private String[] sexArry = new String[]{" 女", " 男"};
+    private String[] sexArry = new String[]{"女", "男"};
     public void onOptionPicker(TextView showSex) {
         SinglePicker<String> picker = new SinglePicker<>(this, sexArry);
         picker.setCanLoop(false);//不禁用循环
@@ -379,23 +384,6 @@ public class ModifyMyInfoActivity extends AppCompatActivity implements View.OnCl
             }
         });
         task.execute("贵州", "毕节", "纳雍");
-    }
-
-    public void onAddress3Picker(View view) {
-        AddressPickTask task = new AddressPickTask(this);
-        task.setHideCounty(true);
-        task.setCallback(new AddressPickTask.Callback() {
-            @Override
-            public void onAddressInitFailed() {
-                showToast("数据初始化失败");
-            }
-
-            @Override
-            public void onAddressPicked(cn.addapp.pickers.entity.Province province, cn.addapp.pickers.entity.City city, cn.addapp.pickers.entity.County county) {
-                showToast(province.getAreaName() + " " + city.getAreaName());
-            }
-        });
-        task.execute("四川", "阿坝");
     }
 
     private void showToast(String msg) {

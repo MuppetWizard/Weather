@@ -1,12 +1,16 @@
 package com.muppet.weather.Adapter;
 
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.muppet.weather.Activity.CommonCityActivity;
 import com.muppet.weather.R;
 
 import java.util.List;
@@ -21,8 +25,7 @@ public class CommonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.adapter_common, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_common, parent, false);
         return new RecyclerViewHolder(view);
     }
 

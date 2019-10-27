@@ -20,11 +20,14 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.navigation.NavigationView;
+import com.google.gson.Gson;
+import com.mob.wrappers.UMSSDKWrapper;
 import com.muppet.weather.Adapter.NewsLIstAdapter;
 import com.muppet.weather.IpAddress;
 import com.muppet.weather.Model.BusCityWrap;
 import com.muppet.weather.Model.NewsList;
 import com.muppet.weather.Model.NormalImg;
+import com.muppet.weather.Model.UserInfo;
 import com.muppet.weather.Model.Weather;
 import com.muppet.weather.R;
 import com.muppet.weather.Utils.Constant;
@@ -40,6 +43,7 @@ import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -59,6 +63,12 @@ import lecho.lib.hellocharts.model.PointValue;
 import lecho.lib.hellocharts.model.ValueShape;
 import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.view.LineChartView;
+import okhttp3.Call;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -158,12 +168,10 @@ public class MainActivity extends AppCompatActivity {
         TextView my_nickname = headerLayout.findViewById(R.id.my_nickname);
         ImageView my_icon = headerLayout.findViewById(R.id.my_icon);
 
-        String phone = getIntent().getStringExtra("phone");
-
         //判断登录没
-        sharedPreferences = getSharedPreferences("user_info", MODE_PRIVATE);
-        String userID = sharedPreferences.getString("userID", null);
-        if (userID != null) {
+        sharedPreferences = getSharedPreferences("user_login", MODE_PRIVATE);
+        String phone = sharedPreferences.getString("phone", null);
+        if (phone == null) {
             //隐藏视图
             menuItem = navigationView.getMenu().findItem(R.id.nav_outlogin);
             menuItem.setVisible(false);
@@ -180,11 +188,32 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         } else {
+            //连接后台加载用户数据
+            RequestParams params = new RequestParams(IpAddress.getUrl(IpAddress.GETUSERINFO));
+            params.addParameter("user_name", phone);
+            x.http().post(params, new Callback.CommonCallback<UserInfo>() {
+                @Override
+                public void onSuccess(UserInfo result) {
+                    my_nickname.setText(result.getName());
+                    Glide.with(MainActivity.this).load(result.getFile()).into(my_icon);
+                }
 
-            String nickname = sharedPreferences.getString("nickname", null);
-            String myIcon = sharedPreferences.getString("myIcon", null);
-            my_nickname.setText("你好啊");
-            Glide.with(this).load("http://cdn.duitang.com/uploads/item/201409/08/20140908155026_RdUwH.thumb.700_0.jpeg").into(my_icon);
+                @Override
+                public void onError(Throwable ex, boolean isOnCallback) {
+                    Toast.makeText(MainActivity.this, "网络请求错误", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onCancelled(CancelledException cex) {
+
+                }
+
+                @Override
+                public void onFinished() {
+
+                }
+            });
+            Toast.makeText(this, phone, Toast.LENGTH_SHORT).show();
             headerLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -537,7 +566,7 @@ public class MainActivity extends AppCompatActivity {
                     Glide.with(MainActivity.this).load(list.get(0).getImg())
                             .error(getResources().getDrawable(R.mipmap.bgimg))
                             .into(ivBg);
-                    Log.e(TAG, "onSuccess: "+list.get(0).getImg() );
+                    Log.e(TAG, "onSuccess: " + list.get(0).getImg());
                     ToastUtil.showMessage("成功");
                 }
             }

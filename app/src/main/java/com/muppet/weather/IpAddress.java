@@ -66,4 +66,17 @@ public class IpAddress {
     public static final String WEATHER = "/simpleWeather/query";
     //新闻
     public static final String NEWS = "/toutiao/index";
+
+    //获取全部用户全部信息
+    public static final String GETUSERINFO = "/userbyid";
+
+    //获取城市列表
+    public static final String GETALLCITY = "/cityquery";
+
+    //删除常用城市
+    public static final String DELETECITY = "/deleteCity";
+
+    //更改用户头像
+    public static final String UPDATEUSERICON = "/updatePhoto";
+
 }

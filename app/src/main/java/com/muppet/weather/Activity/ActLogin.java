@@ -2,6 +2,7 @@ package com.muppet.weather.Activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Spannable;
@@ -161,6 +162,9 @@ public class ActLogin extends AppCompatActivity implements PlatformActionListene
             @Override
             public void onSuccess(String result) {
                 if (result.toString().equals("登录成功")) {
+                    SharedPreferences.Editor editor = getSharedPreferences("user_login",MODE_PRIVATE).edit();
+                    editor.putString("phone",username);
+                    editor.commit();
                     ToastUtil.showMessage("登录成功");
                 } else {
                     ToastUtil.showMessage("登录失败");
