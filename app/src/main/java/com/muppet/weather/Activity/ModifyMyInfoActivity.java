@@ -62,6 +62,12 @@ import cn.addapp.pickers.entity.Province;
 import cn.addapp.pickers.listeners.OnItemPickListener;
 import cn.addapp.pickers.listeners.OnSingleWheelListener;
 import cn.addapp.pickers.picker.SinglePicker;
+import okhttp3.Call;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 import static com.muppet.weather.Utils.FileUtil.getRealFilePathFromUri;
 
@@ -80,7 +86,7 @@ public class ModifyMyInfoActivity extends AppCompatActivity implements View.OnCl
     //调用照相机返回图片文件
     private File tempFile;
     private int type;
-    private UserInfo userInfo;
+    private String phone;
 
     @BindView(R.id.go_back)
     ImageView goBack;
@@ -107,6 +113,8 @@ public class ModifyMyInfoActivity extends AppCompatActivity implements View.OnCl
         setContentView(R.layout.activity_modify_my_info);
         ButterKnife.bind(this);
         rlModifyIcon.setOnClickListener(this);
+        SharedPreferences sharedPreferences = getSharedPreferences("user_login", MODE_PRIVATE);
+        phone = sharedPreferences.getString("phone", null);
         initData();
     }
 
@@ -266,8 +274,6 @@ public class ModifyMyInfoActivity extends AppCompatActivity implements View.OnCl
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    SharedPreferences sharedPreferences = getSharedPreferences("user_login", MODE_PRIVATE);
-                    String phone = sharedPreferences.getString("phone", null);
                     RequestParams params = new RequestParams(IpAddress.getUrl(IpAddress.UPDATEUSERICON));
                     params.addBodyParameter("file", file);
                     params.addBodyParameter("user_name", phone);
@@ -339,9 +345,11 @@ public class ModifyMyInfoActivity extends AppCompatActivity implements View.OnCl
                 break;
             case R.id.rl_modify_sex:
                 //修改
-                onOptionPicker(showSex);
+                String age = showSex.getText().toString();
+                onOptionPicker(showSex,age);
                 break;
             case R.id.rl_modify_birthday:
+
                 onAddressPicker(showBirthday);
                 //onAddressPicker(showBirthday);.3
                 break;
@@ -370,7 +378,7 @@ public class ModifyMyInfoActivity extends AppCompatActivity implements View.OnCl
         myAlertInputDialog.show();
     }
 
-    public void onOptionPicker(TextView showSex) {
+    public void onOptionPicker(TextView showSex, String age) {
         ArrayList<String> list = new ArrayList<>();
         for (int i = 16; i < 90; i++) {
             String s = "";
@@ -402,6 +410,37 @@ public class ModifyMyInfoActivity extends AppCompatActivity implements View.OnCl
             @Override
             public void onItemPicked(int index, String item) {
                 //tijiao
+                if (!item.equals(age)){
+                    Integer integer = Integer.valueOf(age);
+
+                    OkHttpClient client = new OkHttpClient();
+                    RequestBody requestBody = new FormBody.Builder()
+                            .add("user_name", phone)
+                            .add("age",age)
+                            .add("addr", "")
+                            .add("name", "")
+                            .build();
+                    Request request = new Request.Builder()
+                            .url(IpAddress.getUrl(IpAddress.UPDATEUSER))
+                            .post(requestBody)
+                            .build();
+                    client.newCall(request).enqueue(new okhttp3.Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+
+                        }
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            if (response.isSuccessful()) {
+                                try {
+                                    response.body().string();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    });
+                }
                 showSex.setText(item);
             }
         });

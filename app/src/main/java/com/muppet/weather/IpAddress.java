@@ -79,4 +79,7 @@ public class IpAddress {
     //更改用户头像
     public static final String UPDATEUSERICON = "/updatePhoto";
 
+    //更改用户信息
+    public static final String UPDATEUSER = "/updateId";
+
 }

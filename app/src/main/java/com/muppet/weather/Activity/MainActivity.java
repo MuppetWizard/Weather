@@ -20,8 +20,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.navigation.NavigationView;
-import com.google.gson.Gson;
-import com.mob.wrappers.UMSSDKWrapper;
 import com.muppet.weather.Adapter.NewsLIstAdapter;
 import com.muppet.weather.IpAddress;
 import com.muppet.weather.Model.BusCityWrap;
@@ -31,6 +29,7 @@ import com.muppet.weather.Model.UserInfo;
 import com.muppet.weather.Model.Weather;
 import com.muppet.weather.R;
 import com.muppet.weather.Utils.Constant;
+import com.muppet.weather.Utils.MessageEvent;
 import com.muppet.weather.Utils.ToastUtil;
 import com.muppet.weather.Utils.Utils;
 import com.muppet.weather.View.CategoryDialog;
@@ -54,7 +53,6 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Optional;
 import lecho.lib.hellocharts.gesture.ContainerScrollType;
 import lecho.lib.hellocharts.gesture.ZoomType;
 import lecho.lib.hellocharts.model.Line;
@@ -63,12 +61,6 @@ import lecho.lib.hellocharts.model.PointValue;
 import lecho.lib.hellocharts.model.ValueShape;
 import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.view.LineChartView;
-import okhttp3.Call;
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -262,6 +254,12 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Envet(MessageEvent messageEvent){
+        boolean success = messageEvent.isSuccess();
+        initMyActvity();
     }
 
     private void initView() {
