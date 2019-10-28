@@ -111,11 +111,14 @@ public class ModifyMyInfoActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void initData() {
-        userInfo = new UserInfo();
-        showNickname.setText(userInfo.getName());
-        showBirthday.setText(userInfo.getAddr());
-        Glide.with(this).load(userInfo.getFile()).into(showFaces);
-        showSex.setText(userInfo.getAge());
+        String nickname = getIntent().getStringExtra("nickname");
+        String addr = getIntent().getStringExtra("addr");
+        int age = getIntent().getExtras().getInt("age");
+        String file = getIntent().getStringExtra("file");
+        showNickname.setText(nickname);
+        showBirthday.setText(addr);
+        Glide.with(this).load(file).into(showFaces);
+        showSex.setText(""+age);
     }
 
     public void onClick(View v) {
@@ -266,8 +269,8 @@ public class ModifyMyInfoActivity extends AppCompatActivity implements View.OnCl
                     SharedPreferences sharedPreferences = getSharedPreferences("user_login", MODE_PRIVATE);
                     String phone = sharedPreferences.getString("phone", null);
                     RequestParams params = new RequestParams(IpAddress.getUrl(IpAddress.UPDATEUSERICON));
+                    params.addBodyParameter("file", file);
                     params.addBodyParameter("user_name", phone);
-                    params.addBodyParameter("upload", file);
                     params.setMultipart(true);
                     x.http().post(params, new Callback.CommonCallback<String>() {
 

@@ -157,6 +157,11 @@ public class MainActivity extends AppCompatActivity {
         initView();
     }
 
+    private String file = null;
+    private String nickname = null;
+    private String addr = null;
+    private Integer age ;
+
     private void initMyActvity() {
         navigationView = findViewById(R.id.navigation);
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -189,11 +194,16 @@ public class MainActivity extends AppCompatActivity {
             });
         } else {
             //连接后台加载用户数据
+
             RequestParams params = new RequestParams(IpAddress.getUrl(IpAddress.GETUSERINFO));
             params.addParameter("user_name", phone);
             x.http().post(params, new Callback.CommonCallback<UserInfo>() {
                 @Override
                 public void onSuccess(UserInfo result) {
+                    file = result.getFile();
+                    nickname = result.getName();
+                    age = result.getAge();
+                    addr = result.getAddr();
                     my_nickname.setText(result.getName());
                     Glide.with(MainActivity.this).load(result.getFile()).into(my_icon);
                 }
@@ -217,7 +227,12 @@ public class MainActivity extends AppCompatActivity {
             headerLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(MainActivity.this, ModifyMyInfoActivity.class));
+                    Intent intent = new Intent(MainActivity.this,ModifyMyInfoActivity.class);
+                    intent.putExtra("age",age);
+                    intent.putExtra("addr",addr);
+                    intent.putExtra("file",file);
+                    intent.putExtra("nickname",nickname);
+                    startActivity(intent);
                     drawerLayout.closeDrawer(Gravity.LEFT);
                     finish();
                 }
