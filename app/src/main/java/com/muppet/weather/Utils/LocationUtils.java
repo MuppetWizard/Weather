@@ -16,6 +16,7 @@ import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.muppet.weather.App;
@@ -89,9 +90,7 @@ public class LocationUtils {
             return false;
         }
         String provider = mLocationManager.getBestProvider(getCriteria(), true);
-        if (ContextCompat.checkSelfPermission(App.getAppContext(),Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(App.getAppContext(),Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-        }
+
         //动态权限申请
         Location location = mLocationManager.getLastKnownLocation(provider);
 
@@ -129,11 +128,11 @@ public class LocationUtils {
         //设置是否要求速度
         criteria.setSpeedRequired(false);
         // 设置是否允许运营商收费
-        criteria.setCostAllowed(false);
+        criteria.setCostAllowed(true);
         //设置是否需要方位信息
-        criteria.setBearingRequired(false);
+        criteria.setBearingRequired(true);
         //设置是否需要海拔信息
-        criteria.setAltitudeRequired(false);
+        criteria.setAltitudeRequired(true);
         // 设置对电源的需求
         criteria.setPowerRequirement(Criteria.POWER_LOW);
         return criteria;

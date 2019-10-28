@@ -25,6 +25,7 @@
         <activity android:name=".Activity.ClipImageActivity"/>
         <activity android:name=".Activity.ModifyMyInfoActivity" />
         <activity android:name=".Activity.CommonCityActivity" />
+        <activity android:name=".Activity.ActCitySelection"/>
         <activity android:name=".Activity.Forgetpswd" />
         <activity android:name=".Activity.ActLogin" />
         <activity android:name=".Activity.ActRegister" />

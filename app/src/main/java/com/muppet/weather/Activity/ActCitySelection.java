@@ -1,10 +1,12 @@
 package com.muppet.weather.Activity;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -29,6 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -37,6 +40,7 @@ import com.muppet.weather.Model.CityEntity;
 import com.muppet.weather.R;
 import com.muppet.weather.Utils.JsonReadUtil;
 import com.muppet.weather.Utils.LocationUtils;
+import com.muppet.weather.Utils.PermissionUtils;
 import com.muppet.weather.Utils.ToastUtil;
 import com.muppet.weather.View.LetterListView;
 
@@ -52,7 +56,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ActCitySelection extends AppCompatActivity implements AbsListView.OnScrollListener {
+public class ActCitySelection extends AppCompatActivity implements AbsListView.OnScrollListener,PermissionUtils.PermissionCallbacks{
 
     @BindView(R.id.search_locate_content_et)
     EditText searchLocateContentEt;
@@ -84,6 +88,15 @@ public class ActCitySelection extends AppCompatActivity implements AbsListView.O
     protected List<CityEntity> searchCityList = new ArrayList<>();
     protected CityListAdapter cityListAdapter;
     protected SearchCityListAdapter searchCityListAdapter;
+
+    private LocationManager mLocationManager;
+
+    private String[] permissions = {
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+    };
+
+    private static final int REQUEST_PERMISSION_CODE = 12;
 
     private String locationCity, curSelCity;
 
@@ -296,6 +309,12 @@ public class ActCitySelection extends AppCompatActivity implements AbsListView.O
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        PermissionUtils.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         if (!isScroll) {
             return;
@@ -309,6 +328,23 @@ public class ActCitySelection extends AppCompatActivity implements AbsListView.O
             // 延迟让overlay为不可见
             handler.postDelayed(overlayThread, 700);
         }
+    }
+
+    @Override
+    public void onPermissionsAllGranted(int requestCode, List<String> perms, boolean isAllGranted) {
+        if (isAllGranted) {
+            getLocation();
+        }
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        if (PermissionUtils.somePermissionPermanentlyDenied(this, perms)) {
+            PermissionUtils.showDialogGoToAppSettting(this);
+        } else {
+            PermissionUtils.showPermissionReason(requestCode, this, permissions, "需要定位权限");
+        }
+
     }
 
     private class LetterListViewListener implements
@@ -417,7 +453,11 @@ public class ActCitySelection extends AppCompatActivity implements AbsListView.O
                         @Override
                         public void onClick(View v) {
                             //获取定位
-                            getLocation();
+                            if (!PermissionUtils.hasPermissions(ActCitySelection.this, permissions)) {
+                                PermissionUtils.requestPermissions(ActCitySelection.this, REQUEST_PERMISSION_CODE, permissions);
+                            } else {
+                                getLocation();
+                            }
                         }
                     });
                 } else {

@@ -161,7 +161,7 @@ public class ActLogin extends AppCompatActivity implements PlatformActionListene
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                if (result.toString().equals("登录成功")) {
+                if (result.equals("登录成功")) {
                     SharedPreferences.Editor editor = getSharedPreferences("user_login",MODE_PRIVATE).edit();
                     editor.putString("phone",username);
                     editor.commit();
