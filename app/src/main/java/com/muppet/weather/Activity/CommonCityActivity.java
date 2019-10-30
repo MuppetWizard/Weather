@@ -60,7 +60,42 @@ public class CommonCityActivity extends AppCompatActivity {
         recyclerCommonCity.setLayoutManager(new LinearLayoutManager(this));
         sharedPreferences = getSharedPreferences("user_login",MODE_PRIVATE);
         phone = sharedPreferences.getString("phone", null);
-        getData();
+        mDataList = new ArrayList<>();
+        RequestParams params = new RequestParams(IpAddress.getUrl(IpAddress.GETALLCITY));
+        params.addParameter("user_name", phone);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                try {
+                    JSONArray jsonArray = new JSONArray(result);
+                    for (int i = 0; i < jsonArray.length(); i++){
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        String city = jsonObject.getString("city");
+                        Log.e("sss0",city);
+                        mDataList.add(city);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                Toast.makeText(CommonCityActivity.this, "网络请求错误", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
         commonAdapter = new CommonAdapter(mDataList);
         mSwipeToDismissWrapper = new SwipeToDismissWrapper(commonAdapter, mDataList);
         mSwipeToDismissWrapper.attachToRecyclerView(recyclerCommonCity);
@@ -115,43 +150,6 @@ public class CommonCityActivity extends AppCompatActivity {
         });
     }
 
-    private void getData() {
-        mDataList = new ArrayList<>();
-        RequestParams params = new RequestParams(IpAddress.getUrl(IpAddress.GETALLCITY));
-        params.addParameter("user_name", phone);
-        x.http().post(params, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                try {
-                    JSONArray jsonArray = new JSONArray(result);
-                    for (int i = 0; i < jsonArray.length(); i++){
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        String city = jsonObject.getString("city");
-                        Log.e("sss0",city);
-                        mDataList.add(city);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-                Toast.makeText(CommonCityActivity.this, "网络请求错误", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-
-            }
-        });
-    }
 
 
     @OnClick({R.id.lv_back, R.id.tv_addCity})
