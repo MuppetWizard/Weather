@@ -366,7 +366,33 @@ public class ModifyMyInfoActivity extends AppCompatActivity implements View.OnCl
             @Override
             public void onClick(View v) {
                 showNickname.setText(myAlertInputDialog.getResult());
-                //Toast.makeText(ModifyMyInfoActivity.this, myAlertInputDialog.getResult(), Toast.LENGTH_SHORT).show();
+                OkHttpClient client = new OkHttpClient();
+                RequestBody requestBody = new FormBody.Builder()
+                        .add("user_name", phone)
+                        .add("age","")
+                        .add("addr", "")
+                        .add("name", myAlertInputDialog.getResult())
+                        .build();
+                Request request = new Request.Builder()
+                        .url(IpAddress.getUrl(IpAddress.UPDATEUSER))
+                        .post(requestBody)
+                        .build();
+                client.newCall(request).enqueue(new okhttp3.Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+
+                    }
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()) {
+                            try {
+                                response.body().string();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
                 myAlertInputDialog.dismiss();
             }
         }).setNegativeButton("取消", new View.OnClickListener() {
@@ -462,8 +488,34 @@ public class ModifyMyInfoActivity extends AppCompatActivity implements View.OnCl
                 if (county == null) {
                     showToast(province.getAreaName() + city.getAreaName());
                 } else {
+                    OkHttpClient client = new OkHttpClient();
+                    RequestBody requestBody = new FormBody.Builder()
+                            .add("user_name", phone)
+                            .add("age","")
+                            .add("addr", province.getAreaName() + city.getAreaName() + county.getAreaName())
+                            .add("name", "")
+                            .build();
+                    Request request = new Request.Builder()
+                            .url(IpAddress.getUrl(IpAddress.UPDATEUSER))
+                            .post(requestBody)
+                            .build();
+                    client.newCall(request).enqueue(new okhttp3.Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+
+                        }
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            if (response.isSuccessful()) {
+                                try {
+                                    response.body().string();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    });
                     showBirthday.setText(province.getAreaName() + city.getAreaName() + county.getAreaName());
-                    showToast(province.getAreaName() + city.getAreaName() + county.getAreaName());
                 }
             }
         });

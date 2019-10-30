@@ -246,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent);
                         break;
                     case R.id.nav_outlogin:
-                        //删除数据
+                        sharedPreferences.edit().clear().apply();
                         Toast.makeText(MainActivity.this, "删除SharedPreferences中的数据", Toast.LENGTH_SHORT).show();
                         break;
                 }
