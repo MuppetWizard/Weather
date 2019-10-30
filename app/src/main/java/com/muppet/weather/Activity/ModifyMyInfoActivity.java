@@ -118,15 +118,20 @@ public class ModifyMyInfoActivity extends AppCompatActivity implements View.OnCl
         initData();
     }
 
+    private String nickname;
+    private Integer age;
+    private String addr;
+    private String file;
+
     private void initData() {
-        String nickname = getIntent().getStringExtra("nickname");
-        String addr = getIntent().getStringExtra("addr");
-        int age = getIntent().getExtras().getInt("age");
-        String file = getIntent().getStringExtra("file");
+        nickname = getIntent().getStringExtra("nickname");
+        addr = getIntent().getStringExtra("addr");
+        age = getIntent().getExtras().getInt("age");
+        file = getIntent().getStringExtra("file");
         showNickname.setText(nickname);
         showBirthday.setText(addr);
         Glide.with(this).load(file).into(showFaces);
-        showSex.setText(""+age);
+        showSex.setText("" + age);
     }
 
     public void onClick(View v) {
@@ -344,9 +349,7 @@ public class ModifyMyInfoActivity extends AppCompatActivity implements View.OnCl
                 modifyNickName(showNickname);
                 break;
             case R.id.rl_modify_sex:
-                //修改
-                String age = showSex.getText().toString();
-                onOptionPicker(showSex,age);
+                onOptionPicker(showSex);
                 break;
             case R.id.rl_modify_birthday:
 
@@ -369,8 +372,8 @@ public class ModifyMyInfoActivity extends AppCompatActivity implements View.OnCl
                 OkHttpClient client = new OkHttpClient();
                 RequestBody requestBody = new FormBody.Builder()
                         .add("user_name", phone)
-                        .add("age","")
-                        .add("addr", "")
+                        .add("age", String.valueOf(age))
+                        .add("addr",  addr)
                         .add("name", myAlertInputDialog.getResult())
                         .build();
                 Request request = new Request.Builder()
@@ -382,6 +385,7 @@ public class ModifyMyInfoActivity extends AppCompatActivity implements View.OnCl
                     public void onFailure(Call call, IOException e) {
 
                     }
+
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         if (response.isSuccessful()) {
@@ -404,7 +408,7 @@ public class ModifyMyInfoActivity extends AppCompatActivity implements View.OnCl
         myAlertInputDialog.show();
     }
 
-    public void onOptionPicker(TextView showSex, String age) {
+    public void onOptionPicker(TextView showSex) {
         ArrayList<String> list = new ArrayList<>();
         for (int i = 16; i < 90; i++) {
             String s = "";
@@ -435,38 +439,34 @@ public class ModifyMyInfoActivity extends AppCompatActivity implements View.OnCl
         picker.setOnItemPickListener(new OnItemPickListener<String>() {
             @Override
             public void onItemPicked(int index, String item) {
-                //tijiao
-                if (!item.equals(age)){
-                    Integer integer = Integer.valueOf(age);
+                OkHttpClient client = new OkHttpClient();
+                RequestBody requestBody = new FormBody.Builder()
+                        .add("user_name", phone)
+                        .add("age", item)
+                        .add("addr", addr)
+                        .add("name", nickname)
+                        .build();
+                Request request = new Request.Builder()
+                        .url(IpAddress.getUrl(IpAddress.UPDATEUSER))
+                        .post(requestBody)
+                        .build();
+                client.newCall(request).enqueue(new okhttp3.Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
 
-                    OkHttpClient client = new OkHttpClient();
-                    RequestBody requestBody = new FormBody.Builder()
-                            .add("user_name", phone)
-                            .add("age",age)
-                            .add("addr", "")
-                            .add("name", "")
-                            .build();
-                    Request request = new Request.Builder()
-                            .url(IpAddress.getUrl(IpAddress.UPDATEUSER))
-                            .post(requestBody)
-                            .build();
-                    client.newCall(request).enqueue(new okhttp3.Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
+                    }
 
-                        }
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-                            if (response.isSuccessful()) {
-                                try {
-                                    response.body().string();
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()) {
+                            try {
+                                response.body().string();
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
                         }
-                    });
-                }
+                    }
+                });
                 showSex.setText(item);
             }
         });
@@ -488,12 +488,13 @@ public class ModifyMyInfoActivity extends AppCompatActivity implements View.OnCl
                 if (county == null) {
                     showToast(province.getAreaName() + city.getAreaName());
                 } else {
+
                     OkHttpClient client = new OkHttpClient();
                     RequestBody requestBody = new FormBody.Builder()
                             .add("user_name", phone)
-                            .add("age","")
-                            .add("addr", province.getAreaName() + city.getAreaName() + county.getAreaName())
-                            .add("name", "")
+                            .add("age", String.valueOf(age))
+                            .add("addr",  province.getAreaName() + city.getAreaName() + county.getAreaName())
+                            .add("name", nickname)
                             .build();
                     Request request = new Request.Builder()
                             .url(IpAddress.getUrl(IpAddress.UPDATEUSER))
@@ -504,6 +505,7 @@ public class ModifyMyInfoActivity extends AppCompatActivity implements View.OnCl
                         public void onFailure(Call call, IOException e) {
 
                         }
+
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
                             if (response.isSuccessful()) {
