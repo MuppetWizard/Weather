@@ -148,6 +148,8 @@ public class LocationUtils {
      */
     public static Address getAddress(Context context, double latitude, double longitude) {
         Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+        boolean falg = geocoder.isPresent();
+        Log.e("123", "getAddress: falg is "+falg );
         try {
             List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
             if (addresses.size() > 0)
