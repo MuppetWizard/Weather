@@ -38,8 +38,10 @@ import com.muppet.weather.Model.UserInfo;
 import com.muppet.weather.R;
 import com.muppet.weather.Utils.AddressPickTask;
 import com.muppet.weather.Utils.FileUtil;
+import com.muppet.weather.Utils.MessageEvent;
 import com.muppet.weather.View.CircleImageView;
 
+import org.greenrobot.eventbus.EventBus;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
@@ -288,6 +290,7 @@ public class ModifyMyInfoActivity extends AppCompatActivity implements View.OnCl
                         @Override
                         public void onSuccess(String result) {
                             Log.e("ss", result);
+                            EventBus.getDefault().post(new MessageEvent("update"));
                         }
 
                         @Override
@@ -398,6 +401,7 @@ public class ModifyMyInfoActivity extends AppCompatActivity implements View.OnCl
                     }
                 });
                 myAlertInputDialog.dismiss();
+                EventBus.getDefault().post(new MessageEvent("update"));
             }
         }).setNegativeButton("取消", new View.OnClickListener() {
             @Override
@@ -468,6 +472,7 @@ public class ModifyMyInfoActivity extends AppCompatActivity implements View.OnCl
                     }
                 });
                 showSex.setText(item);
+                EventBus.getDefault().post(new MessageEvent("update"));
             }
         });
         picker.show();
@@ -518,6 +523,7 @@ public class ModifyMyInfoActivity extends AppCompatActivity implements View.OnCl
                         }
                     });
                     showBirthday.setText(province.getAreaName() + city.getAreaName() + county.getAreaName());
+                    EventBus.getDefault().post(new MessageEvent("update"));
                 }
             }
         });

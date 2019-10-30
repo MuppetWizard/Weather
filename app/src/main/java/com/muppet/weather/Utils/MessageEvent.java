@@ -2,13 +2,17 @@ package com.muppet.weather.Utils;
 
 public class MessageEvent {
 
-    private boolean isSuccess;
+    private String message;
 
-    public boolean isSuccess() {
-        return isSuccess;
+    public MessageEvent(String message) {
+        this.message = message;
     }
 
-    public void setSuccess(boolean success) {
-        isSuccess = success;
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

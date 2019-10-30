@@ -15,12 +15,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
 import com.muppet.weather.Adapter.CommonAdapter;
 import com.muppet.weather.IpAddress;
+import com.muppet.weather.Model.CommonCity;
+import com.muppet.weather.Model.UserInfo;
 import com.muppet.weather.R;
+import com.muppet.weather.Utils.MessageEvent;
 import com.muppet.weather.View.ItemSwipeCallback;
 import com.muppet.weather.View.SwipeToDismissWrapper;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,12 +33,19 @@ import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.Call;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class CommonCityActivity extends AppCompatActivity {
 
@@ -48,7 +60,6 @@ public class CommonCityActivity extends AppCompatActivity {
     private SwipeToDismissWrapper mSwipeToDismissWrapper;
     private SharedPreferences sharedPreferences;
     private List<String> mDataList;
-    private CommonAdapter commonAdapter;
     private String phone;
 
     @Override
@@ -58,45 +69,42 @@ public class CommonCityActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         recyclerCommonCity = findViewById(R.id.recycler_common_city);
         recyclerCommonCity.setLayoutManager(new LinearLayoutManager(this));
-        sharedPreferences = getSharedPreferences("user_login",MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("user_login", MODE_PRIVATE);
         phone = sharedPreferences.getString("phone", null);
         mDataList = new ArrayList<>();
-        RequestParams params = new RequestParams(IpAddress.getUrl(IpAddress.GETALLCITY));
-        params.addParameter("user_name", phone);
-        x.http().post(params, new Callback.CommonCallback<String>() {
+        OkHttpClient client = new OkHttpClient();
+        RequestBody requestBody = new FormBody.Builder()
+                .add("user_name", phone)
+                .build();
+        Request request = new Request.Builder()
+                .url(IpAddress.getUrl(IpAddress.GETALLCITY))
+                .post(requestBody)
+                .build();
+        client.newCall(request).enqueue(new okhttp3.Callback() {
             @Override
-            public void onSuccess(String result) {
-                try {
-                    JSONArray jsonArray = new JSONArray(result);
-                    for (int i = 0; i < jsonArray.length(); i++){
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        String city = jsonObject.getString("city");
-                        Log.e("sss0",city);
-                        mDataList.add(city);
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    try {
+                        JSONArray jsonArray = new JSONArray(response.body().string());
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            String city = jsonObject.getString("city");
+                            mDataList.add(city);
+                            Log.e("ss", String.valueOf(mDataList.size()));
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
-
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-                Toast.makeText(CommonCityActivity.this, "网络请求错误", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-
             }
         });
-        commonAdapter = new CommonAdapter(mDataList);
+        CommonAdapter commonAdapter = new CommonAdapter(mDataList);
         mSwipeToDismissWrapper = new SwipeToDismissWrapper(commonAdapter, mDataList);
         mSwipeToDismissWrapper.attachToRecyclerView(recyclerCommonCity);
         recyclerCommonCity.setLayoutManager(new LinearLayoutManager(this));
@@ -113,12 +121,13 @@ public class CommonCityActivity extends AppCompatActivity {
 
                                 RequestParams params = new RequestParams(IpAddress.getUrl(IpAddress.DELETECITY));
                                 params.addParameter("user_name", phone);
-                                params.addBodyParameter("city",mDataList.get(position));
+                                params.addBodyParameter("city", mDataList.get(position));
                                 x.http().post(params, new Callback.CommonCallback<String>() {
                                     @Override
                                     public void onSuccess(String result) {
 
                                     }
+
                                     @Override
                                     public void onError(Throwable ex, boolean isOnCallback) {
                                         Toast.makeText(CommonCityActivity.this, "网络请求错误", Toast.LENGTH_SHORT).show();
@@ -136,6 +145,7 @@ public class CommonCityActivity extends AppCompatActivity {
                                 });
                                 mSwipeToDismissWrapper.notifyDataSetChanged();
                                 dialog.dismiss();
+                                EventBus.getDefault().post(new MessageEvent("update"));
                             }
                         })
                         .setNegativeButton("否", new DialogInterface.OnClickListener() {
@@ -149,8 +159,6 @@ public class CommonCityActivity extends AppCompatActivity {
             }
         });
     }
-
-
 
     @OnClick({R.id.lv_back, R.id.tv_addCity})
     public void onClick(View view) {

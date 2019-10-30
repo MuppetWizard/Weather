@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
 import android.location.Location;
 import android.location.LocationManager;
@@ -30,11 +31,13 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.muppet.weather.IpAddress;
 import com.muppet.weather.Model.BusCityWrap;
 import com.muppet.weather.Model.CityEntity;
 import com.muppet.weather.R;
@@ -48,6 +51,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -667,7 +673,31 @@ public class ActCitySelection extends AppCompatActivity implements AbsListView.O
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() { //设置确定按钮
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                RequestParams params = new RequestParams(IpAddress.getUrl(IpAddress.ADDCITY));
+                SharedPreferences sharedPreferences = getSharedPreferences("user_login", MODE_PRIVATE);
+                String phone = sharedPreferences.getString("phone", null);
+                params.addParameter("user_name", phone);
+                params.addBodyParameter("city", curCity);
+                x.http().post(params, new Callback.CommonCallback<String>() {
+                    @Override
+                    public void onSuccess(String result) {
 
+                    }
+
+                    @Override
+                    public void onError(Throwable ex, boolean isOnCallback) {
+                    }
+
+                    @Override
+                    public void onCancelled(CancelledException cex) {
+
+                    }
+
+                    @Override
+                    public void onFinished() {
+
+                    }
+                });
                 BusCityWrap cityWrap = new BusCityWrap(curCity);
                 EventBus.getDefault().post(cityWrap);
                 startActivity(new Intent(ActCitySelection.this,MainActivity.class));

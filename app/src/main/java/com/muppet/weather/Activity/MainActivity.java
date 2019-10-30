@@ -258,8 +258,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Envet(MessageEvent messageEvent){
-        boolean success = messageEvent.isSuccess();
-        initMyActvity();
+        String message = messageEvent.getMessage();
+        if (message == "update"){
+            initMyActvity();
+        }
     }
 
     private void initView() {

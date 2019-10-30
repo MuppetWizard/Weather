@@ -82,4 +82,7 @@ public class IpAddress {
     //更改用户信息
     public static final String UPDATEUSER = "/updateId";
 
+    //更改用户信息
+    public static final String ADDCITY = "/cityadd";
+
 }
