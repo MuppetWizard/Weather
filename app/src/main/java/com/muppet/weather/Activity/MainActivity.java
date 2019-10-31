@@ -134,10 +134,12 @@ public class MainActivity extends AppCompatActivity {
     private List<String> futureC;
 
     //我的页面
-    private NavigationView navigationView;
-    private DrawerLayout drawerLayout;
     private SharedPreferences sharedPreferences;
     private MenuItem menuItem;
+    private String file = null;
+    private String nickname = null;
+    private String addr = null;
+    private Integer age;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,34 +152,40 @@ public class MainActivity extends AppCompatActivity {
         initView();
     }
 
-    @Override
+    /*@Override
     protected void onStart() {
         super.onStart();
         initMyActvity();
-    }
-
-    private String file = null;
-    private String nickname = null;
-    private String addr = null;
-    private Integer age;
+    }*/
 
     private void initMyActvity() {
-        navigationView = findViewById(R.id.navigation);
-        drawerLayout = findViewById(R.id.drawer_layout);
+        sharedPreferences = getSharedPreferences("user_login", MODE_PRIVATE);
+        String phone = sharedPreferences.getString("phone", null);
+        NavigationView navigationView = findViewById(R.id.navigation);
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        View headerLayout = navigationView.inflateHeaderView(R.layout.drawer_layout_left_head);
+        TextView my_nickname = headerLayout.findViewById(R.id.my_nickname);
+        ImageView my_icon = headerLayout.findViewById(R.id.my_icon);
+        if (phone != null){
+            setUserInfo(phone,my_nickname,my_icon,navigationView,drawerLayout,headerLayout);
+        }else {
+            gotoLogin(navigationView,my_icon,my_nickname,drawerLayout,headerLayout);
+        }
         String goback = getIntent().getStringExtra("goback");
         if (goback != null) {
             drawerLayout.openDrawer(Gravity.LEFT);
         }
-        View headerLayout = navigationView.inflateHeaderView(R.layout.drawer_layout_left_head);
-        TextView my_nickname = headerLayout.findViewById(R.id.my_nickname);
-        ImageView my_icon = headerLayout.findViewById(R.id.my_icon);
-        JudgeLogin(my_nickname,my_icon,headerLayout);
         ivPersonal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 drawerLayout.openDrawer(Gravity.LEFT);
             }
         });
+        navigationViewSelecr(my_icon,my_nickname,headerLayout,navigationView,drawerLayout);
+    }
+
+    //点击事件
+    private void navigationViewSelecr(ImageView my_icon, TextView my_nickname, View headerLayout, NavigationView navigationView, DrawerLayout drawerLayout) {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -188,8 +196,9 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent);
                         break;
                     case R.id.nav_outlogin:
+                        sharedPreferences = getSharedPreferences("user_login", MODE_PRIVATE);
                         sharedPreferences.edit().clear().apply();
-                        Toast.makeText(MainActivity.this, "删除SharedPreferences中的数据", Toast.LENGTH_SHORT).show();
+                        gotoLogin(navigationView,my_icon,my_nickname,drawerLayout,headerLayout);
                         break;
                     case R.id.nav_othercity:
                         startActivity(new Intent(MainActivity.this,ActCitySelection.class));
@@ -201,70 +210,71 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void JudgeLogin(TextView my_nickname, ImageView my_icon, View headerLayout) {
-        //判断登录没
-        sharedPreferences = getSharedPreferences("user_login", MODE_PRIVATE);
-        String phone = sharedPreferences.getString("phone", null);
-        if (phone == null) {
-            //隐藏视图
-            menuItem = navigationView.getMenu().findItem(R.id.nav_outlogin);
-            menuItem.setVisible(false);
-            menuItem = navigationView.getMenu().findItem(R.id.nav_commoncity);
-            menuItem.setVisible(false);
-            my_nickname.setText("未登录");
-            my_icon.setImageResource(R.mipmap.not_logged);
-            headerLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    startActivity(new Intent(MainActivity.this, ActLogin.class));
-                    drawerLayout.closeDrawer(Gravity.LEFT);
-                }
-            });
-        } else {
-            menuItem = navigationView.getMenu().findItem(R.id.nav_othercity);
-            menuItem.setVisible(false);
-            RequestParams params = new RequestParams(IpAddress.getUrl(IpAddress.GETUSERINFO));
-            params.addParameter("user_name", phone);
-            x.http().post(params, new Callback.CommonCallback<UserInfo>() {
-                @Override
-                public void onSuccess(UserInfo result) {
-                    file = result.getFile();
-                    nickname = result.getName();
-                    age = result.getAge();
-                    addr = result.getAddr();
-                    my_nickname.setText(result.getName());
-                    Glide.with(MainActivity.this).load(result.getFile()).into(my_icon);
-                }
+    //去登录
+    private void gotoLogin(NavigationView navigationView, ImageView my_icon, TextView my_nickname, DrawerLayout drawerLayout, View headerLayout) {
+        menuItem = navigationView.getMenu().findItem(R.id.nav_outlogin);
+        menuItem.setVisible(false);
+        menuItem = navigationView.getMenu().findItem(R.id.nav_commoncity);
+        menuItem.setVisible(false);
+        menuItem = navigationView.getMenu().findItem(R.id.nav_othercity);
+        menuItem.setVisible(true);
+        my_nickname.setText("未登录");
+        my_icon.setImageResource(R.mipmap.not_logged);
+        headerLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, ActLogin.class));
+                drawerLayout.closeDrawer(Gravity.LEFT);
+                finish();
+            }
+        });
+    }
 
-                @Override
-                public void onError(Throwable ex, boolean isOnCallback) {
-                    Toast.makeText(MainActivity.this, "网络请求错误", Toast.LENGTH_SHORT).show();
-                }
+    //登录设置值
+    private void setUserInfo(String phone, TextView my_nickname, ImageView my_icon, NavigationView navigationView, DrawerLayout drawerLayout, View headerLayout) {
+        menuItem = navigationView.getMenu().findItem(R.id.nav_othercity);
+        menuItem.setVisible(false);
+        RequestParams params = new RequestParams(IpAddress.getUrl(IpAddress.GETUSERINFO));
+        params.addParameter("user_name", phone);
+        x.http().post(params, new Callback.CommonCallback<UserInfo>() {
+            @Override
+            public void onSuccess(UserInfo result) {
+                file = result.getFile();
+                nickname = result.getName();
+                age = result.getAge();
+                addr = result.getAddr();
+                my_nickname.setText(result.getName());
+                Glide.with(MainActivity.this).load(result.getFile()).into(my_icon);
+            }
 
-                @Override
-                public void onCancelled(CancelledException cex) {
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                Toast.makeText(MainActivity.this, "网络请求错误", Toast.LENGTH_SHORT).show();
+            }
 
-                }
+            @Override
+            public void onCancelled(CancelledException cex) {
 
-                @Override
-                public void onFinished() {
+            }
 
-                }
-            });
-            Toast.makeText(this, phone, Toast.LENGTH_SHORT).show();
-            headerLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(MainActivity.this, ModifyMyInfoActivity.class);
-                    intent.putExtra("age", age);
-                    intent.putExtra("addr", addr);
-                    intent.putExtra("file", file);
-                    intent.putExtra("nickname", nickname);
-                    startActivity(intent);
-                    drawerLayout.closeDrawer(Gravity.LEFT);
-                }
-            });
-        }
+            @Override
+            public void onFinished() {
+
+            }
+        });
+        Toast.makeText(this, phone, Toast.LENGTH_SHORT).show();
+        headerLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, ModifyMyInfoActivity.class);
+                intent.putExtra("age", age);
+                intent.putExtra("addr", addr);
+                intent.putExtra("file", file);
+                intent.putExtra("nickname", nickname);
+                startActivity(intent);
+                drawerLayout.closeDrawer(Gravity.LEFT);
+            }
+        });
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

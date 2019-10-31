@@ -165,9 +165,11 @@ public class ActLogin extends AppCompatActivity implements PlatformActionListene
                     SharedPreferences.Editor editor = getSharedPreferences("user_login",MODE_PRIVATE).edit();
                     editor.putString("phone",username);
                     editor.apply();
-                    editor.commit();
-                    startActivity(new Intent(ActLogin.this,MainActivity.class));
+                    Intent intent = new Intent(ActLogin.this,MainActivity.class);
+                    intent.putExtra("phone",username);
+                    startActivity(intent);
                     ToastUtil.showMessage("登录成功");
+                    finish();
                 } else {
                     ToastUtil.showMessage("登录失败");
                 }

@@ -173,6 +173,7 @@ public class CommonCityActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.lv_back:
+                startActivity(new Intent(this,MainActivity.class));
                 finish();
                 break;
             case R.id.tv_addCity:

@@ -2,14 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group
-        android:id="@+id/nav_item1"
-        android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_othercity"
-            android:icon="@mipmap/common_city"
-            android:title="      其 他 城 市" />
-    </group>
-    <group
         android:id="@+id/nav_item2"
         android:checkableBehavior="single">
         <item
@@ -24,5 +16,14 @@
             android:id="@+id/nav_outlogin"
             android:icon="@mipmap/out_logged"
             android:title="      退 出 登 录" />
+    </group>
+
+    <group
+        android:id="@+id/nav_item1"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_othercity"
+            android:icon="@mipmap/common_city"
+            android:title="      其 他 城 市" />
     </group>
 </menu>

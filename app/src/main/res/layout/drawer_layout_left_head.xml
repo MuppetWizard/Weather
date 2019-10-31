@@ -16,7 +16,6 @@
             android:layout_marginTop="10dp"
             android:id="@+id/my_nickname"
             android:textSize="18sp"
-            android:text="七月的风"
             android:gravity="center"
             android:textColor="#fff"
             android:layout_width="match_parent"
