@@ -194,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_commoncity:
                         Intent intent = new Intent(MainActivity.this, CommonCityActivity.class);
                         startActivity(intent);
+                        finish();
                         break;
                     case R.id.nav_outlogin:
                         sharedPreferences = getSharedPreferences("user_login", MODE_PRIVATE);
@@ -273,6 +274,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("nickname", nickname);
                 startActivity(intent);
                 drawerLayout.closeDrawer(Gravity.LEFT);
+                finish();
             }
         });
     }

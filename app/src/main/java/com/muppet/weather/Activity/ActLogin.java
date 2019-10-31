@@ -166,7 +166,6 @@ public class ActLogin extends AppCompatActivity implements PlatformActionListene
                     editor.putString("phone",username);
                     editor.apply();
                     Intent intent = new Intent(ActLogin.this,MainActivity.class);
-                    intent.putExtra("phone",username);
                     startActivity(intent);
                     ToastUtil.showMessage("登录成功");
                     finish();
