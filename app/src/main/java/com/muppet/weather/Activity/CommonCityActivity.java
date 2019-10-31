@@ -15,11 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.Gson;
 import com.muppet.weather.Adapter.CommonAdapter;
 import com.muppet.weather.IpAddress;
-import com.muppet.weather.Model.CommonCity;
-import com.muppet.weather.Model.UserInfo;
 import com.muppet.weather.R;
 import com.muppet.weather.Utils.MessageEvent;
 import com.muppet.weather.View.ItemSwipeCallback;
