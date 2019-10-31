@@ -185,8 +185,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         } else {
-            //连接后台加载用户数据
-
             RequestParams params = new RequestParams(IpAddress.getUrl(IpAddress.GETUSERINFO));
             params.addParameter("user_name", phone);
             x.http().post(params, new Callback.CommonCallback<UserInfo>() {

@@ -65,94 +65,106 @@ public class CommonCityActivity extends AppCompatActivity {
         setContentView(R.layout.activity_common_city);
         ButterKnife.bind(this);
         recyclerCommonCity = findViewById(R.id.recycler_common_city);
-        recyclerCommonCity.setLayoutManager(new LinearLayoutManager(this));
         sharedPreferences = getSharedPreferences("user_login", MODE_PRIVATE);
         phone = sharedPreferences.getString("phone", null);
         mDataList = new ArrayList<>();
-        OkHttpClient client = new OkHttpClient();
-        RequestBody requestBody = new FormBody.Builder()
-                .add("user_name", phone)
-                .build();
-        Request request = new Request.Builder()
-                .url(IpAddress.getUrl(IpAddress.GETALLCITY))
-                .post(requestBody)
-                .build();
-        client.newCall(request).enqueue(new okhttp3.Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-
-            }
+        RequestParams params = new RequestParams(IpAddress.getUrl(IpAddress.GETALLCITY));
+        params.addBodyParameter("user_name", phone);
+        params.setMultipart(true);
+        x.http().post(params, new Callback.CommonCallback<String>() {
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
+            public void onSuccess(String result) {
+                JSONArray jsonArray = null;
+                try {
+                    jsonArray = new JSONArray(result);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = null;
                     try {
-                        JSONArray jsonArray = new JSONArray(response.body().string());
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            String city = jsonObject.getString("city");
-                            mDataList.add(city);
-                            Log.e("ss", String.valueOf(mDataList.size()));
-                        }
-
+                        jsonObject = jsonArray.getJSONObject(i);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    String city = null;
+                    try {
+                        city = jsonObject.getString("city");
+                        Log.e("s11ss", String.valueOf(mDataList.size()));
+                        Log.e("sss",city);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    mDataList.add(city);
                 }
-            }
-        });
-        CommonAdapter commonAdapter = new CommonAdapter(mDataList);
-        mSwipeToDismissWrapper = new SwipeToDismissWrapper(commonAdapter, mDataList);
-        mSwipeToDismissWrapper.attachToRecyclerView(recyclerCommonCity);
-        recyclerCommonCity.setLayoutManager(new LinearLayoutManager(this));
-        recyclerCommonCity.setAdapter(mSwipeToDismissWrapper);
-        mSwipeToDismissWrapper.setItemDismissListener(new ItemSwipeCallback.ItemDismissListener() {
+                    CommonAdapter commonAdapter = new CommonAdapter(mDataList);
+                    mSwipeToDismissWrapper = new SwipeToDismissWrapper(commonAdapter, mDataList);
+                    mSwipeToDismissWrapper.attachToRecyclerView(recyclerCommonCity);
+                    recyclerCommonCity.setLayoutManager(new LinearLayoutManager(CommonCityActivity.this));
+                    recyclerCommonCity.setAdapter(mSwipeToDismissWrapper);
+                    mSwipeToDismissWrapper.setItemDismissListener(new ItemSwipeCallback.ItemDismissListener() {
+                        @Override
+                        public void onItemDismiss(int position) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(CommonCityActivity.this);
+                            builder.setMessage("确定删除该城市吗 ?")
+                                    .setPositiveButton("是", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            mDataList.remove(position);
+
+                                            RequestParams params = new RequestParams(IpAddress.getUrl(IpAddress.DELETECITY));
+                                            params.addParameter("user_name", phone);
+                                            params.addBodyParameter("city", mDataList.get(position));
+                                            x.http().post(params, new Callback.CommonCallback<String>() {
+                                                @Override
+                                                public void onSuccess(String result) {
+
+                                                }
+
+                                                @Override
+                                                public void onError(Throwable ex, boolean isOnCallback) {
+                                                    Toast.makeText(CommonCityActivity.this, "网络请求错误", Toast.LENGTH_SHORT).show();
+                                                }
+
+                                                @Override
+                                                public void onCancelled(CancelledException cex) {
+
+                                                }
+
+                                                @Override
+                                                public void onFinished() {
+
+                                                }
+                                            });
+                                            mSwipeToDismissWrapper.notifyDataSetChanged();
+                                            dialog.dismiss();
+                                            EventBus.getDefault().post(new MessageEvent("update"));
+                                        }
+                                    })
+                                    .setNegativeButton("否", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            mSwipeToDismissWrapper.notifyDataSetChanged();
+                                            dialog.dismiss();
+                                        }
+                                    }).show();
+                        }
+                    });
+                }
             @Override
-            public void onItemDismiss(final int position) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(CommonCityActivity.this);
-                builder.setMessage("确定删除该城市吗 ?")
-                        .setPositiveButton("是", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mDataList.remove(position);
+            public void onError(Throwable ex, boolean isOnCallback) {
 
-                                RequestParams params = new RequestParams(IpAddress.getUrl(IpAddress.DELETECITY));
-                                params.addParameter("user_name", phone);
-                                params.addBodyParameter("city", mDataList.get(position));
-                                x.http().post(params, new Callback.CommonCallback<String>() {
-                                    @Override
-                                    public void onSuccess(String result) {
+            }
 
-                                    }
+            @Override
+            public void onCancelled(CancelledException cex) {
 
-                                    @Override
-                                    public void onError(Throwable ex, boolean isOnCallback) {
-                                        Toast.makeText(CommonCityActivity.this, "网络请求错误", Toast.LENGTH_SHORT).show();
-                                    }
+            }
 
-                                    @Override
-                                    public void onCancelled(CancelledException cex) {
+            @Override
+            public void onFinished() {
 
-                                    }
-
-                                    @Override
-                                    public void onFinished() {
-
-                                    }
-                                });
-                                mSwipeToDismissWrapper.notifyDataSetChanged();
-                                dialog.dismiss();
-                                EventBus.getDefault().post(new MessageEvent("update"));
-                            }
-                        })
-                        .setNegativeButton("否", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mSwipeToDismissWrapper.notifyDataSetChanged();
-                                dialog.dismiss();
-                            }
-                        })
-                        .show();
             }
         });
     }
