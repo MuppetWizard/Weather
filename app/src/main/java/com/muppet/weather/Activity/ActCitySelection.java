@@ -673,33 +673,36 @@ public class ActCitySelection extends AppCompatActivity implements AbsListView.O
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() { //设置确定按钮
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                RequestParams params = new RequestParams(IpAddress.getUrl(IpAddress.ADDCITY));
                 SharedPreferences sharedPreferences = getSharedPreferences("user_login", MODE_PRIVATE);
                 String phone = sharedPreferences.getString("phone", null);
-                params.addParameter("user_name", phone);
-                params.addBodyParameter("city", curCity);
-                x.http().post(params, new Callback.CommonCallback<String>() {
-                    @Override
-                    public void onSuccess(String result) {
+                if (phone != null) {//空值判断
+                    RequestParams params = new RequestParams(IpAddress.getUrl(IpAddress.ADDCITY));
+                    params.addParameter("user_name", phone);
+                    params.addBodyParameter("city", curCity);
+                    x.http().post(params, new Callback.CommonCallback<String>() {
+                        @Override
+                        public void onSuccess(String result) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onError(Throwable ex, boolean isOnCallback) {
-                    }
+                        @Override
+                        public void onError(Throwable ex, boolean isOnCallback) {
+                        }
 
-                    @Override
-                    public void onCancelled(CancelledException cex) {
+                        @Override
+                        public void onCancelled(CancelledException cex) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onFinished() {
+                        @Override
+                        public void onFinished() {
 
-                    }
-                });
+                        }
+                    });
+                }
+
                 BusCityWrap cityWrap = new BusCityWrap(curCity);
-                EventBus.getDefault().post(cityWrap);
+                EventBus.getDefault().post(cityWrap);//通知活动更新
                 startActivity(new Intent(ActCitySelection.this,MainActivity.class));
                 dialog.dismiss();
 

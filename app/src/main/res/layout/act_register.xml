@@ -59,6 +59,7 @@
            android:maxLength="11"
            android:hint="请输入手机号"
            android:textColorHint="@color/app_Gray"
+           android:textColor="@color/app_Dark"
            android:background="@null"
            android:textSize="20sp"
            android:layout_gravity="center"/>
@@ -89,6 +90,7 @@
             android:layout_width="240dp"
             android:layout_height="wrap_content"
             android:textColorHint="@color/app_Gray"
+            android:textColor="@color/app_Dark"
             android:layout_gravity="center"
             android:background="@null"
             android:hint="请输入密码"

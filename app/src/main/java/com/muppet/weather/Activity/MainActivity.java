@@ -127,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
     private List<NewsList.ResultBean.DataBean> mNewsData;
     private Weather.ResultBean.RealtimeBean mWeather;
     private NewsLIstAdapter newsLIstAdapter;
+    private String CategoryId = "4e4d610cdf714d2966000002";//壁纸类别id
 
     private List<Integer> FutureTemp;
     private List<PointValue> mPointValues = new ArrayList<PointValue>();
@@ -149,10 +150,16 @@ public class MainActivity extends AppCompatActivity {
         initView();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        initMyActvity();
+    }
+
     private String file = null;
     private String nickname = null;
     private String addr = null;
-    private Integer age ;
+    private Integer age;
 
     private void initMyActvity() {
         navigationView = findViewById(R.id.navigation);
@@ -164,7 +171,37 @@ public class MainActivity extends AppCompatActivity {
         View headerLayout = navigationView.inflateHeaderView(R.layout.drawer_layout_left_head);
         TextView my_nickname = headerLayout.findViewById(R.id.my_nickname);
         ImageView my_icon = headerLayout.findViewById(R.id.my_icon);
+        JudgeLogin(my_nickname,my_icon,headerLayout);
+        ivPersonal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.openDrawer(Gravity.LEFT);
+            }
+        });
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                switch (item.getItemId()) {
+                    case R.id.nav_commoncity:
+                        Intent intent = new Intent(MainActivity.this, CommonCityActivity.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.nav_outlogin:
+                        sharedPreferences.edit().clear().apply();
+                        Toast.makeText(MainActivity.this, "删除SharedPreferences中的数据", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.nav_othercity:
+                        startActivity(new Intent(MainActivity.this,ActCitySelection.class));
+                        break;
+                }
+                drawerLayout.closeDrawer(Gravity.LEFT);
+                return false;
+            }
+        });
+    }
 
+    private void JudgeLogin(TextView my_nickname, ImageView my_icon, View headerLayout) {
         //判断登录没
         sharedPreferences = getSharedPreferences("user_login", MODE_PRIVATE);
         String phone = sharedPreferences.getString("phone", null);
@@ -181,7 +218,6 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     startActivity(new Intent(MainActivity.this, ActLogin.class));
                     drawerLayout.closeDrawer(Gravity.LEFT);
-                    finish();
                 }
             });
         } else {
@@ -219,50 +255,22 @@ public class MainActivity extends AppCompatActivity {
             headerLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(MainActivity.this,ModifyMyInfoActivity.class);
-                    intent.putExtra("age",age);
-                    intent.putExtra("addr",addr);
-                    intent.putExtra("file",file);
-                    intent.putExtra("nickname",nickname);
+                    Intent intent = new Intent(MainActivity.this, ModifyMyInfoActivity.class);
+                    intent.putExtra("age", age);
+                    intent.putExtra("addr", addr);
+                    intent.putExtra("file", file);
+                    intent.putExtra("nickname", nickname);
                     startActivity(intent);
                     drawerLayout.closeDrawer(Gravity.LEFT);
-                    finish();
                 }
             });
         }
-        ivPersonal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawerLayout.openDrawer(Gravity.LEFT);
-            }
-        });
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int id = item.getItemId();
-                switch (item.getItemId()) {
-                    case R.id.nav_commoncity:
-                        Intent intent = new Intent(MainActivity.this, CommonCityActivity.class);
-                        startActivity(intent);
-                        break;
-                    case R.id.nav_outlogin:
-                        sharedPreferences.edit().clear().apply();
-                        Toast.makeText(MainActivity.this, "删除SharedPreferences中的数据", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.nav_othercity:
-                        //我是朱平 我是个哈皮
-                        break;
-                }
-                drawerLayout.closeDrawer(Gravity.LEFT);
-                return false;
-            }
-        });
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void Envet(MessageEvent messageEvent){
+    public void Envet(MessageEvent messageEvent) {
         String message = messageEvent.getMessage();
-        if (message == "update"){
+        if (message.equals("update")) {
             initMyActvity();
         }
     }
@@ -271,7 +279,7 @@ public class MainActivity extends AppCompatActivity {
         newsLIstAdapter = new NewsLIstAdapter(this);
         lvNews.setAdapter(newsLIstAdapter);
         sv.smoothScrollTo(0, 0);//调整scrollview位置
-        getBgImg();
+        getBgImg(CategoryId);
         getWeather();
         getNewsList();
     }
@@ -564,9 +572,9 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 获取图片
      */
-    private void getBgImg() {
+    public void getBgImg(String categoryId) {
 
-        RequestParams params = new RequestParams(IpAddress.getImgUrl(IpAddress.IMG_NORMAL));
+        RequestParams params = new RequestParams(IpAddress.getImgUrl(IpAddress.IMG_CATEGORY) + "/" + categoryId + "/" + "vertical");
         //返回数量
         params.addParameter("limit", Constant.NORMAL_ONE);
         //
@@ -606,6 +614,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
     /**
      * 保存图片
      */
@@ -633,7 +642,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.manage:
                 View popupView = this.getLayoutInflater().inflate(R.layout.popupwindow_option, null);
-                final PopupWindow window = new PopupWindow(popupView, 450, 400);
+                final PopupWindow window = new PopupWindow(popupView, 330, 370);
                 TextView tvSaveImg = popupView.findViewById(R.id.tv_saveImg);
                 TextView tvChangeImg = popupView.findViewById(R.id.tv_changeImg);
                 TextView tvCategory = popupView.findViewById(R.id.tv_category);
@@ -648,19 +657,24 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         changeImg += 1;
-                        getBgImg();
+                        getBgImg(CategoryId);
                         window.dismiss();
                     }
                 });
                 tvCategory.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        //回调接口
+                        CategoryDialog.OnDialogItemClickListener itemClickListener = categoryId -> {
+                            CategoryId = categoryId;
+                            getBgImg(CategoryId);
+                        };
                         if (categoryDialog == null) {
-                            categoryDialog = new CategoryDialog(MainActivity.this);
+                            categoryDialog = new CategoryDialog(MainActivity.this, itemClickListener);
                         }
                         categoryDialog.show();
                         window.dismiss();
+
                     }
                 });
                 window.setFocusable(true);

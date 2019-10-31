@@ -28,7 +28,6 @@
         <activity android:name=".Activity.ActCitySelection"/>
         <activity android:name=".Activity.Forgetpswd" />
         <activity android:name=".Activity.ActLogin" />
-        <activity android:name=".Activity.ActCitySelection"/>
         <activity android:name=".Activity.ActRegister" />
         <activity android:name=".Activity.MainActivity"
             android:launchMode="singleTask">

@@ -19,6 +19,7 @@
         android:paddingTop="10dp"
         android:paddingBottom="10dp">
         <ProgressBar
+            android:id="@+id/pg_progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"/>
@@ -27,8 +28,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:layout_centerInParent="true"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
+            android:listSelector="@null"
             android:stretchMode="columnWidth"
             android:numColumns="3"
             android:columnWidth="40dp"
