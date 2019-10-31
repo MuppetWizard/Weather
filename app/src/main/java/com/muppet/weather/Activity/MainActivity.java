@@ -185,6 +185,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         } else {
+            menuItem = navigationView.getMenu().findItem(R.id.nav_othercity);
+            menuItem.setVisible(false);
             RequestParams params = new RequestParams(IpAddress.getUrl(IpAddress.GETUSERINFO));
             params.addParameter("user_name", phone);
             x.http().post(params, new Callback.CommonCallback<UserInfo>() {
@@ -246,6 +248,9 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_outlogin:
                         sharedPreferences.edit().clear().apply();
                         Toast.makeText(MainActivity.this, "删除SharedPreferences中的数据", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.nav_othercity:
+                        //我是朱平 我是个哈皮
                         break;
                 }
                 drawerLayout.closeDrawer(Gravity.LEFT);
