@@ -2,8 +2,13 @@ package com.muppet.weather.Activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Message;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -19,6 +24,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
 import com.google.android.material.navigation.NavigationView;
 import com.muppet.weather.Adapter.NewsLIstAdapter;
 import com.muppet.weather.IpAddress;
@@ -29,6 +37,8 @@ import com.muppet.weather.Model.UserInfo;
 import com.muppet.weather.Model.Weather;
 import com.muppet.weather.R;
 import com.muppet.weather.Utils.Constant;
+import com.muppet.weather.Utils.DownLoadImageService;
+import com.muppet.weather.Utils.ImageDownLoadCallBack;
 import com.muppet.weather.Utils.MessageEvent;
 import com.muppet.weather.Utils.ToastUtil;
 import com.muppet.weather.Utils.Utils;
@@ -42,13 +52,20 @@ import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -141,6 +158,8 @@ public class MainActivity extends AppCompatActivity {
     private String addr = null;
     private Integer age;
 
+    private String ImgUrl;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,11 +171,6 @@ public class MainActivity extends AppCompatActivity {
         initView();
     }
 
-    /*@Override
-    protected void onStart() {
-        super.onStart();
-        initMyActvity();
-    }*/
 
     private void initMyActvity() {
         sharedPreferences = getSharedPreferences("user_login", MODE_PRIVATE);
@@ -585,7 +599,6 @@ public class MainActivity extends AppCompatActivity {
      * 获取图片
      */
     public void getBgImg(String categoryId) {
-
         RequestParams params = new RequestParams(IpAddress.getImgUrl(IpAddress.IMG_CATEGORY) + "/" + categoryId + "/" + "vertical");
         //返回数量
         params.addParameter("limit", Constant.NORMAL_ONE);
@@ -600,10 +613,23 @@ public class MainActivity extends AppCompatActivity {
             public void onSuccess(NormalImg result) {
                 if (result != null) {
                     List<NormalImg.ResBean.VerticalBean> list = result.getRes().getVertical();
-
-                    Glide.with(MainActivity.this).load(list.get(0).getImg())
+                    ImgUrl = list.get(0).getImg();
+                    Glide.with(MainActivity.this)
+                            .load(list.get(0).getImg())
                             .error(getResources().getDrawable(R.mipmap.bgimg))
                             .into(ivBg);
+                    //获取当前图片bitmap
+                   /* try {
+                        bitmap = Glide.with(MainActivity.this)
+                                .load(list.get(0).getImg())
+                                .asBitmap()
+                                .into(Target.SIZE_ORIGINAL,Target.SIZE_ORIGINAL)
+                                .get();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }*/
                     Log.e(TAG, "onSuccess: " + list.get(0).getImg());
                     ToastUtil.showMessage("成功");
                 }
@@ -630,13 +656,28 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 保存图片
      */
-    private void saveImg() {
+    private void saveImg()  {
+        Log.e(TAG, "saveImg: "+ImgUrl );
+        DownLoadImageService service = new DownLoadImageService(this, ImgUrl, new ImageDownLoadCallBack() {
+            @Override
+            public void onDownLoadSuccess(File file) {
 
-        //dhgdhdfh
-        int a = 1;
-        int b = 2;
+            }
 
+            @Override
+            public void onDownLoadSuccess(Bitmap bitmap) {
+
+            }
+
+            @Override
+            public void onDownLoadFailed() {
+
+            }
+        });
+        //启动图片下载线程
+        new Thread(service).start();
     }
+
 
     @OnClick({R.id.tv_footView, R.id.manage})
     public void onClick(View view) {
@@ -658,24 +699,20 @@ public class MainActivity extends AppCompatActivity {
                 TextView tvSaveImg = popupView.findViewById(R.id.tv_saveImg);
                 TextView tvChangeImg = popupView.findViewById(R.id.tv_changeImg);
                 TextView tvCategory = popupView.findViewById(R.id.tv_category);
-                tvSaveImg.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //
-                        window.dismiss();
-                    }
+                //点击保存图片
+                tvSaveImg.setOnClickListener(v -> {
+                    saveImg();
+                    window.dismiss();
                 });
-                tvChangeImg.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                //点击更换图片
+                tvChangeImg.setOnClickListener(v -> {
                         changeImg += 1;
                         getBgImg(CategoryId);
                         window.dismiss();
-                    }
+
                 });
-                tvCategory.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                //点击选择壁纸类别
+                tvCategory.setOnClickListener(v -> {
                         //回调接口
                         CategoryDialog.OnDialogItemClickListener itemClickListener = categoryId -> {
                             CategoryId = categoryId;
@@ -687,8 +724,9 @@ public class MainActivity extends AppCompatActivity {
                         categoryDialog.show();
                         window.dismiss();
 
-                    }
+
                 });
+
                 window.setFocusable(true);
                 window.update();
                 window.showAsDropDown(manage, 0, 0);

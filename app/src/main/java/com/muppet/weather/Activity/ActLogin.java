@@ -18,6 +18,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
 import com.muppet.weather.IpAddress;
 import com.muppet.weather.R;
 import com.muppet.weather.Utils.ToastUtil;
@@ -28,9 +32,6 @@ import org.xutils.x;
 
 import java.util.HashMap;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -65,8 +66,11 @@ public class ActLogin extends AppCompatActivity implements PlatformActionListene
     ImageView qqLogin;
     @BindView(R.id.rememberPswd)
     CheckBox rememberPswd;
+    @BindView(R.id.lv_back)
+    ImageView lvBack;
     private EventHandler handler;
     private PlatformDb platDB;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,7 +121,7 @@ public class ActLogin extends AppCompatActivity implements PlatformActionListene
         userreadLogin.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
-    @OnClick({R.id.msg_button_login, R.id.forget_button_login, R.id.register_button_login, R.id.login, R.id.qq_login})
+    @OnClick({R.id.msg_button_login, R.id.forget_button_login, R.id.register_button_login, R.id.login, R.id.qq_login,R.id.lv_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.msg_button_login:
@@ -139,6 +143,9 @@ public class ActLogin extends AppCompatActivity implements PlatformActionListene
             case R.id.qq_login:
                 QQLogin();
                 break;
+            case R.id.lv_back:
+                finish();
+                break;
         }
     }
 
@@ -153,39 +160,47 @@ public class ActLogin extends AppCompatActivity implements PlatformActionListene
 //    }
 
     private void Login() {
-        String username = userLogin.getText().toString();
-        String password = pswdLogin.getText().toString();
-        RequestParams params = new RequestParams(IpAddress.getUrl(IpAddress.LOGIN));
-        params.addParameter("user_name", username);
-        params.addParameter("password", password);
-        x.http().get(params, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                if (result.equals("登录成功")) {
-                    SharedPreferences.Editor editor = getSharedPreferences("user_login",MODE_PRIVATE).edit();
-                    editor.putString("phone",username);
-                    editor.apply();
-                    Intent intent = new Intent(ActLogin.this,MainActivity.class);
-                    startActivity(intent);
-                    ToastUtil.showMessage("登录成功");
-                    finish();
-                } else {
-                    ToastUtil.showMessage("登录失败");
+        String username = userLogin.getText().toString().trim();
+        String password = pswdLogin.getText().toString().trim();
+        if (username.equals("")) {
+            ToastUtil.showMessage("请输入账号");
+        } else if (password.equals("")) {
+            ToastUtil.showMessage("请输入密码");
+        } else {
+            RequestParams params = new RequestParams(IpAddress.getUrl(IpAddress.LOGIN));
+            params.addParameter("user_name", username);
+            params.addParameter("password", password);
+            x.http().get(params, new Callback.CommonCallback<String>() {
+                @Override
+                public void onSuccess(String result) {
+                    if (result.equals("登录成功")) {
+                        SharedPreferences.Editor editor = getSharedPreferences("user_login", MODE_PRIVATE).edit();
+                        editor.putString("phone", username);
+                        editor.apply();
+                        Intent intent = new Intent(ActLogin.this, MainActivity.class);
+                        startActivity(intent);
+                        ToastUtil.showMessage("登录成功");
+                        finish();
+                    } else {
+                        ToastUtil.showMessage("登录失败.请检查账号密码");
+                    }
                 }
-            }
 
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-            }
+                @Override
+                public void onError(Throwable ex, boolean isOnCallback) {
+                    ToastUtil.showMessage("请检查你的网络链接");
+                }
 
-            @Override
-            public void onCancelled(CancelledException cex) {
-            }
+                @Override
+                public void onCancelled(CancelledException cex) {
+                }
 
-            @Override
-            public void onFinished() {
-            }
-        });
+                @Override
+                public void onFinished() {
+                }
+            });
+        }
+
     }
 
     private void forgetLogin(Context context) {
@@ -283,6 +298,6 @@ public class ActLogin extends AppCompatActivity implements PlatformActionListene
 
     @OnClick(R.id.rememberPswd)
     public void onViewClicked() {
-      //1  ToastUtil.showMessage("sssssss");
+        //1  ToastUtil.showMessage("sssssss");
     }
 }
