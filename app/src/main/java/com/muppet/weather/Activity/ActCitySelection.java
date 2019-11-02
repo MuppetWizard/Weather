@@ -670,50 +670,44 @@ public class ActCitySelection extends AppCompatActivity implements AbsListView.O
         builder.setTitle("提示"); //设置标题
         builder.setMessage("是否设置 " + curCity + " 为您的当前城市？"); //设置内容
 
-        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() { //设置确定按钮
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                SharedPreferences sharedPreferences = getSharedPreferences("user_login", MODE_PRIVATE);
-                String phone = sharedPreferences.getString("phone", null);
-                if (phone != null) {//空值判断
-                    RequestParams params = new RequestParams(IpAddress.getUrl(IpAddress.ADDCITY));
-                    params.addParameter("user_name", phone);
-                    params.addBodyParameter("city", curCity);
-                    x.http().post(params, new Callback.CommonCallback<String>() {
-                        @Override
-                        public void onSuccess(String result) {
+        //设置确定按钮
+        builder.setPositiveButton("确定", (dialog, which) -> {
+            SharedPreferences sharedPreferences = getSharedPreferences("user_login", MODE_PRIVATE);
+            String phone = sharedPreferences.getString("phone", null);
+            if (phone != null) {//空值判断
+                RequestParams params = new RequestParams(IpAddress.getUrl(IpAddress.ADDCITY));
+                params.addParameter("user_name", phone);
+                params.addBodyParameter("city", curCity);
+                x.http().post(params, new Callback.CommonCallback<String>() {
+                    @Override
+                    public void onSuccess(String result) {
 
-                        }
+                    }
 
-                        @Override
-                        public void onError(Throwable ex, boolean isOnCallback) {
-                        }
+                    @Override
+                    public void onError(Throwable ex, boolean isOnCallback) {
+                    }
 
-                        @Override
-                        public void onCancelled(CancelledException cex) {
+                    @Override
+                    public void onCancelled(CancelledException cex) {
 
-                        }
+                    }
 
-                        @Override
-                        public void onFinished() {
+                    @Override
+                    public void onFinished() {
 
-                        }
-                    });
-                }
-
-                BusCityWrap cityWrap = new BusCityWrap(curCity);
-                EventBus.getDefault().post(cityWrap);//通知活动更新
-                startActivity(new Intent(ActCitySelection.this,MainActivity.class));
-                dialog.dismiss();
-
+                    }
+                });
             }
+
+            BusCityWrap cityWrap = new BusCityWrap(curCity);
+            EventBus.getDefault().post(cityWrap);//通知活动更新
+            startActivity(new Intent(ActCitySelection.this,MainActivity.class));
+            dialog.dismiss();
+
         });
-        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() { //设置取消按钮
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
+        //设置取消按钮
+        builder.setNegativeButton("取消", (dialog, which) -> dialog.dismiss());
 
         builder.create().show();
     }
