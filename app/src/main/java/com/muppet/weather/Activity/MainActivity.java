@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.ScrollView;
@@ -79,7 +80,7 @@ import lecho.lib.hellocharts.model.ValueShape;
 import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.view.LineChartView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     @BindView(R.id.iv_bg)
     ImageView ivBg;
@@ -304,6 +305,7 @@ public class MainActivity extends AppCompatActivity {
     private void initView() {
         newsLIstAdapter = new NewsLIstAdapter(this);
         lvNews.setAdapter(newsLIstAdapter);
+        lvNews.setOnItemClickListener(this);
         sv.smoothScrollTo(0, 0);//调整scrollview位置
         getBgImg(CategoryId);
         getWeather();
@@ -738,5 +740,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    //新闻
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        String NewsUrl = mNewsData.get(position).getUrl();
+        Intent intent = new Intent(this, ActNewsDetil.class);
+        intent.putExtra("URL", NewsUrl);
+        startActivity(intent);
     }
 }
