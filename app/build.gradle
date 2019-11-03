@@ -49,6 +49,7 @@ dependencies {
     implementation 'com.github.addappcn:android-pickers:1.0.3'
     implementation 'com.github.HanHuoBin:BaseDialog:1.2.0'
     implementation 'com.contrarywind:Android-PickerView:4.1.9'
+    implementation "androidx.recyclerview:recyclerview:1.0.0"
     api 'com.squareup.okhttp3:logging-interceptor:3.5.0'
 
     implementation 'com.github.bumptech.glide:glide:3.7.0'

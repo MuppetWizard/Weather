@@ -111,12 +111,12 @@ public class CommonCityActivity extends AppCompatActivity {
                                     .setPositiveButton("是", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            mDataList.remove(position);
-
+                                            Log.e("sssss", mDataList.get(position));
+                                            Log.e("sssss","position:"+position);
                                             RequestParams params = new RequestParams(IpAddress.getUrl(IpAddress.DELETECITY));
                                             params.addParameter("user_name", phone);
                                             params.addBodyParameter("city", mDataList.get(position));
-                                            x.http().post(params, new Callback.CommonCallback<String>() {
+                                            x.http().post(params, new CommonCallback<String>() {
                                                 @Override
                                                 public void onSuccess(String result) {
 
@@ -137,6 +137,7 @@ public class CommonCityActivity extends AppCompatActivity {
 
                                                 }
                                             });
+                                            mDataList.remove(position);
                                             mSwipeToDismissWrapper.notifyDataSetChanged();
                                             dialog.dismiss();
                                             EventBus.getDefault().post(new MessageEvent("update"));
