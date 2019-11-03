@@ -121,7 +121,7 @@ public class ModifyMyInfoActivity extends AppCompatActivity implements View.OnCl
     }
 
     private String nickname;
-    private Integer age;
+    private int age;
     private String addr;
     private String file;
 
