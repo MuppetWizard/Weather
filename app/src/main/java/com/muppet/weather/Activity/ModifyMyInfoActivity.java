@@ -427,12 +427,13 @@ public class ModifyMyInfoActivity extends AppCompatActivity implements View.OnCl
         picker.setCancelTextSize(20);
         picker.setSubmitText("确定");
         picker.setSubmitTextSize(20);
-        picker.setSelectedIndex(8);
+        //picker.setSelectedIndex(8);
         picker.setWheelModeEnable(false);
         //启用权重 setWeightWidth 才起作用
         picker.setLabel("岁");
         picker.setWeightEnable(true);
         picker.setWeightWidth(1);
+        picker.setSelectedIndex(age-16);
         picker.setSelectedTextColor(Color.BLACK);//前四位值是透明度
         picker.setUnSelectedTextColor(Color.GRAY);
         picker.setOnSingleWheelListener(new OnSingleWheelListener() {
